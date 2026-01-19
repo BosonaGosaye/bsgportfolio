@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Github, Linkedin, Twitter, Mail } from 'lucide-react';
+import { Github, Linkedin, Twitter, Instagram, Mail } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
 import { getProfile, getEducation, getExperience, getSkills, getCertifications } from '../services/api';
 import TimelineItem from '../components/TimelineItem';
 import SectionHeader from '../components/SectionHeader';
@@ -70,7 +71,7 @@ const About = () => {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] text-center px-4">
         <h2 className="text-2xl font-bold text-red-500 mb-4">{error}</h2>
-        <button 
+        <button
           onClick={() => window.location.reload()}
           className="px-6 py-2 bg-primary text-white rounded-lg hover:bg-blue-700 transition-colors"
         >
@@ -89,9 +90,9 @@ const About = () => {
 
   return (
     <>
-      <Meta 
-        title="About Me" 
-        description={profile?.bio?.substring(0, 160)} 
+      <Meta
+        title="About Me"
+        description={profile?.bio?.substring(0, 160)}
         image={profile?.profileImage}
       />
 
@@ -117,9 +118,7 @@ const About = () => {
             >
               <h1 className="text-4xl font-bold mb-6">About Me</h1>
               <div className="prose prose-lg dark:prose-invert max-w-none text-slate-600 dark:text-slate-400">
-                <p className="whitespace-pre-line leading-relaxed">
-                  {profile?.bio}
-                </p>
+                <ReactMarkdown>{profile?.bio}</ReactMarkdown>
               </div>
               <div className="mt-8 flex space-x-6">
                 {profile?.socialLinks?.github && (
@@ -135,6 +134,11 @@ const About = () => {
                 {profile?.socialLinks?.twitter && (
                   <a href={profile.socialLinks.twitter} target="_blank" rel="noopener noreferrer" className="text-slate-600 dark:text-slate-400 hover:text-primary transition-colors">
                     <Twitter size={28} />
+                  </a>
+                )}
+                {profile?.socialLinks?.instagram && (
+                  <a href={profile.socialLinks.instagram} target="_blank" rel="noopener noreferrer" className="text-slate-600 dark:text-slate-400 hover:text-primary transition-colors">
+                    <Instagram size={28} />
                   </a>
                 )}
                 {profile?.email && (

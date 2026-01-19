@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
     Save,
     Loader,
@@ -8,9 +8,15 @@ import {
     Github,
     Linkedin,
     Twitter,
+    Instagram,
     FileText,
     Image as ImageIcon,
-    CloudUpload
+    CloudUpload,
+    Bold,
+    Italic,
+    Link as LinkIcon,
+    List,
+    Heading
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { getProfile, updateProfile, uploadFile } from '../../services/api';
@@ -21,6 +27,10 @@ const ProfileAdmin = () => {
     const [saving, setSaving] = useState(false);
     const [uploading, setUploading] = useState(false);
     const [message, setMessage] = useState({ type: '', text: '' });
+
+    // Refs for markdown editor
+    const bioRef = useRef(null);
+    const shortBioRef = useRef(null);
 
     const [formData, setFormData] = useState({
         name: '',
@@ -35,7 +45,8 @@ const ProfileAdmin = () => {
         socialLinks: {
             github: '',
             linkedin: '',
-            twitter: ''
+            twitter: '',
+            instagram: ''
         }
     });
 
@@ -61,7 +72,8 @@ const ProfileAdmin = () => {
                     socialLinks: {
                         github: res.data.socialLinks?.github || '',
                         linkedin: res.data.socialLinks?.linkedin || '',
-                        twitter: res.data.socialLinks?.twitter || ''
+                        twitter: res.data.socialLinks?.twitter || '',
+                        instagram: res.data.socialLinks?.instagram || ''
                     }
                 });
             }
@@ -132,6 +144,57 @@ const ProfileAdmin = () => {
         } finally {
             setUploading(false);
         }
+    };
+
+    const insertMarkdown = (type, fieldName) => {
+        const textarea = fieldName === 'bio' ? bioRef.current : shortBioRef.current;
+        if (!textarea) return;
+
+        const start = textarea.selectionStart;
+        const end = textarea.selectionEnd;
+        const text = formData[fieldName];
+        const before = text.substring(0, start);
+        const after = text.substring(end);
+        const selection = text.substring(start, end);
+
+        let newText = '';
+        let cursorOffset = 0;
+
+        switch (type) {
+            case 'bold':
+                newText = `${before}**${selection || 'text'}**${after}`;
+                cursorOffset = 2;
+                break;
+            case 'italic':
+                newText = `${before}*${selection || 'text'}*${after}`;
+                cursorOffset = 1;
+                break;
+            case 'h1':
+                newText = `${before}# ${selection || 'Heading'}\n${after}`;
+                cursorOffset = 2;
+                break;
+            case 'h2':
+                newText = `${before}## ${selection || 'Heading'}\n${after}`;
+                cursorOffset = 3;
+                break;
+            case 'link':
+                newText = `${before}[${selection || 'text'}](url)${after}`;
+                cursorOffset = 1;
+                break;
+            case 'list':
+                newText = `${before}- ${selection || 'Item'}\n${after}`;
+                cursorOffset = 2;
+                break;
+            default:
+                return;
+        }
+
+        setFormData(prev => ({ ...prev, [fieldName]: newText }));
+
+        setTimeout(() => {
+            textarea.focus();
+            textarea.setSelectionRange(start + cursorOffset, start + cursorOffset + (selection.length || 4));
+        }, 0);
     };
 
     const handleSubmit = async (e) => {
@@ -369,6 +432,21 @@ const ProfileAdmin = () => {
                                 placeholder="https://twitter.com/..."
                             />
                         </div>
+
+                        <div>
+                            <label className="block text-sm font-bold mb-2 flex items-center gap-2">
+                                <Instagram size={16} className="text-slate-400" />
+                                Instagram URL
+                            </label>
+                            <input
+                                type="url"
+                                name="social_instagram"
+                                value={formData.socialLinks.instagram}
+                                onChange={handleInputChange}
+                                className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 focus:ring-2 focus:ring-primary outline-none transition-all"
+                                placeholder="https://instagram.com/..."
+                            />
+                        </div>
                     </div>
                 </div>
 
@@ -376,26 +454,66 @@ const ProfileAdmin = () => {
                     <h3 className="text-sm font-bold uppercase tracking-wider text-slate-500 border-b border-slate-200 dark:border-slate-700 pb-2">Bio</h3>
 
                     <div>
-                        <label className="block text-sm font-bold mb-2">Short Bio (Hero Section)</label>
+                        <div className="flex items-center justify-between mb-2">
+                            <label className="block text-sm font-bold">Short Bio (Hero Section)</label>
+                            <div className="flex gap-1">
+                                <button type="button" onClick={() => insertMarkdown('bold', 'shortBio')} className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-slate-500" title="Bold">
+                                    <Bold size={16} />
+                                </button>
+                                <button type="button" onClick={() => insertMarkdown('italic', 'shortBio')} className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-slate-500" title="Italic">
+                                    <Italic size={16} />
+                                </button>
+                                <button type="button" onClick={() => insertMarkdown('h1', 'shortBio')} className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-slate-500" title="Heading">
+                                    <Heading size={16} />
+                                </button>
+                                <button type="button" onClick={() => insertMarkdown('list', 'shortBio')} className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-slate-500" title="List">
+                                    <List size={16} />
+                                </button>
+                                <button type="button" onClick={() => insertMarkdown('link', 'shortBio')} className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-slate-500" title="Link">
+                                    <LinkIcon size={16} />
+                                </button>
+                            </div>
+                        </div>
                         <textarea
+                            ref={shortBioRef}
                             name="shortBio"
                             value={formData.shortBio}
                             onChange={handleInputChange}
                             rows="3"
-                            className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 focus:ring-2 focus:ring-primary outline-none transition-all resize-none"
-                            placeholder="A brief introduction..."
+                            className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 focus:ring-2 focus:ring-primary outline-none transition-all resize-none font-mono text-sm"
+                            placeholder="A brief introduction... (Markdown supported)"
                         />
                     </div>
 
                     <div>
-                        <label className="block text-sm font-bold mb-2">Full Bio (About Page)</label>
+                        <div className="flex items-center justify-between mb-2">
+                            <label className="block text-sm font-bold">Full Bio (About Page)</label>
+                            <div className="flex gap-1">
+                                <button type="button" onClick={() => insertMarkdown('bold', 'bio')} className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-slate-500" title="Bold">
+                                    <Bold size={16} />
+                                </button>
+                                <button type="button" onClick={() => insertMarkdown('italic', 'bio')} className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-slate-500" title="Italic">
+                                    <Italic size={16} />
+                                </button>
+                                <button type="button" onClick={() => insertMarkdown('h1', 'bio')} className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-slate-500" title="Heading">
+                                    <Heading size={16} />
+                                </button>
+                                <button type="button" onClick={() => insertMarkdown('list', 'bio')} className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-slate-500" title="List">
+                                    <List size={16} />
+                                </button>
+                                <button type="button" onClick={() => insertMarkdown('link', 'bio')} className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-slate-500" title="Link">
+                                    <LinkIcon size={16} />
+                                </button>
+                            </div>
+                        </div>
                         <textarea
+                            ref={bioRef}
                             name="bio"
                             value={formData.bio}
                             onChange={handleInputChange}
                             rows="6"
-                            className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 focus:ring-2 focus:ring-primary outline-none transition-all"
-                            placeholder="Your full story..."
+                            className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 focus:ring-2 focus:ring-primary outline-none transition-all font-mono text-sm"
+                            placeholder="Your full story... (Markdown supported)"
                         />
                     </div>
                 </div>

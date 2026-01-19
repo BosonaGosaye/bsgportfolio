@@ -32,14 +32,15 @@ const Navbar = () => {
               <Link
                 key={link.name}
                 to={link.path}
-                className="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary transition-colors font-medium"
+                className="relative text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary transition-colors font-medium group"
               >
                 {link.name}
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-primary to-purple-600 group-hover:w-full transition-all duration-300"></span>
               </Link>
             ))}
             <button
               onClick={toggleTheme}
-              className="text-slate-600 dark:text-slate-300 hover:text-primary transition-colors"
+              className="p-2 text-slate-600 dark:text-slate-300 hover:text-primary hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-all hover:scale-110"
               aria-label="Toggle theme"
             >
               {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}

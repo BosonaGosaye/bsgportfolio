@@ -13,7 +13,8 @@ const profileSchema = new mongoose.Schema({
   socialLinks: {
     github: String,
     linkedin: String,
-    twitter: String
+    twitter: String,
+    instagram: String
   }
 }, { timestamps: true });
 

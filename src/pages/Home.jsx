@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Download, Mail } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import ReactMarkdown from 'react-markdown';
 import { getProfile, getProjects, getSkills, getBlogs } from '../services/api';
 import ProjectCard from '../components/ProjectCard';
 import BlogCard from '../components/BlogCard';
@@ -75,29 +76,29 @@ const Home = () => {
               transition={{ duration: 0.8 }}
             >
               <h1 className="text-4xl md:text-6xl font-extrabold mb-6 leading-tight">
-                Hi, I'm <span className="text-primary">{profile?.name || '...'}</span>
+                Hi, I'm <span className="bg-gradient-to-r from-primary via-blue-600 to-purple-600 bg-clip-text text-transparent animate-gradient">{profile?.name || '...'}</span>
               </h1>
               <h2 className="text-2xl md:text-3xl font-bold text-slate-600 dark:text-slate-400 mb-6">
                 {profile?.title || '...'}
               </h2>
-              <p className="text-lg text-slate-600 dark:text-slate-400 mb-8 max-w-xl">
-                {profile?.bio || '...'}
-              </p>
+              <div className="prose prose-lg dark:prose-invert max-w-xl mb-8">
+                <ReactMarkdown>{profile?.bio || '...'}</ReactMarkdown>
+              </div>
               <div className="flex flex-wrap gap-4">
                 <Link
                   to="/contact"
-                  className="px-8 py-3 bg-primary text-white rounded-lg font-bold flex items-center hover:bg-blue-700 transition-all shadow-lg shadow-blue-500/30"
+                  className="group px-8 py-3 bg-gradient-to-r from-primary to-blue-600 text-white rounded-xl font-bold flex items-center hover:shadow-xl hover:shadow-primary/50 hover:scale-105 transition-all duration-300 shadow-lg shadow-blue-500/30"
                 >
-                  Contact Me <Mail className="ml-2" size={20} />
+                  Contact Me <Mail className="ml-2 group-hover:translate-x-1 transition-transform" size={20} />
                 </Link>
                 {profile?.resumeUrl && (
                   <a
                     href={profile.resumeUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-8 py-3 border-2 border-slate-200 dark:border-slate-700 rounded-lg font-bold flex items-center hover:bg-slate-100 dark:hover:bg-slate-800 transition-all"
+                    className="group px-8 py-3 border-2 border-slate-300 dark:border-slate-600 rounded-xl font-bold flex items-center hover:border-primary hover:bg-primary/5 hover:scale-105 transition-all duration-300"
                   >
-                    Download Resume <Download className="ml-2" size={20} />
+                    Download Resume <Download className="ml-2 group-hover:translate-y-0.5 transition-transform" size={20} />
                   </a>
                 )}
               </div>

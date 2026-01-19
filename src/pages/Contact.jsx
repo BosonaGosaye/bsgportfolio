@@ -231,10 +231,10 @@ const Contact = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-4 bg-primary text-white rounded-xl font-bold flex items-center justify-center hover:bg-blue-700 transition-all shadow-lg shadow-blue-500/30 disabled:opacity-70 disabled:cursor-not-allowed"
+                className="group w-full py-4 bg-gradient-to-r from-primary to-blue-600 text-white rounded-xl font-bold flex items-center justify-center hover:shadow-xl hover:shadow-primary/50 hover:scale-105 transition-all duration-300 shadow-lg shadow-blue-500/30 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100"
               >
                 {loading ? 'Sending...' : 'Send Message'}
-                <Send size={20} className="ml-2" />
+                <Send size={20} className="ml-2 group-hover:translate-x-1 transition-transform" />
               </button>
             </form>
           </motion.div>
