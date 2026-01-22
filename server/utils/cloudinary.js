@@ -11,15 +11,16 @@ cloudinary.config({
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: async (req, file) => {
-    // For PDFs, use raw resource type to enable direct download
+    // For PDFs, use image resource type (Cloudinary handles PDFs better this way for public access)
     const isPdf = file.mimetype === 'application/pdf';
 
     if (isPdf) {
       return {
         folder: 'bsgportfolio',
-        resource_type: 'raw',
+        resource_type: 'image', // Use 'image' instead of 'raw' to avoid 401 errors
         format: 'pdf',
         public_id: `resume_${Date.now()}`,
+        flags: 'attachment', // Force download
       };
     } else {
       // For images
