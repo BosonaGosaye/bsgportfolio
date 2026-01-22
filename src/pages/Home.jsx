@@ -82,7 +82,7 @@ const Home = () => {
                 {profile?.title || '...'}
               </h2>
               <div className="prose prose-lg dark:prose-invert max-w-xl mb-8">
-                <ReactMarkdown>{profile?.bio || '...'}</ReactMarkdown>
+                <ReactMarkdown>{profile?.shortBio || '...'}</ReactMarkdown>
               </div>
               <div className="flex flex-wrap gap-4">
                 <Link
@@ -94,6 +94,7 @@ const Home = () => {
                 {profile?.resumeUrl && (
                   <a
                     href={profile.resumeUrl}
+                    download
                     target="_blank"
                     rel="noopener noreferrer"
                     className="group px-8 py-3 border-2 border-slate-300 dark:border-slate-600 rounded-xl font-bold flex items-center hover:border-primary hover:bg-primary/5 hover:scale-105 transition-all duration-300"

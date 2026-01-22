@@ -42,7 +42,7 @@ const Footer = () => {
           </div>
         </div>
         <div className="mt-12 pt-8 border-t border-white/10 text-center text-slate-300">
-          <p>&copy; {new Date().getFullYear()} BSG Portfolio. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} BSG Portfolio. All rights reserved. /Developed by <b>Bosona G.</b></p>
         </div>
       </div>
     </footer>

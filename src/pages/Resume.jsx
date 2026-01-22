@@ -48,11 +48,11 @@ const Resume = () => {
   return (
     <>
       <Meta title="Resume" description={`Professional resume of ${profile?.name}`} />
-      
+
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Actions - Hidden on Print */}
         <div className="flex justify-end gap-4 mb-8 print:hidden">
-          <button 
+          <button
             onClick={handlePrint}
             className="flex items-center gap-2 px-6 py-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 rounded-xl font-bold hover:bg-slate-200 dark:hover:bg-slate-700 transition-all"
           >
@@ -60,8 +60,9 @@ const Resume = () => {
             Print
           </button>
           {profile?.resumeUrl && (
-            <a 
+            <a
               href={profile.resumeUrl}
+              download
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 px-6 py-2 bg-primary text-white rounded-xl font-bold hover:bg-blue-700 transition-all shadow-lg shadow-blue-500/30"
@@ -73,7 +74,7 @@ const Resume = () => {
         </div>
 
         {/* Resume Content */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="bg-white dark:bg-slate-900 shadow-2xl dark:shadow-none border border-slate-100 dark:border-slate-800 rounded-3xl overflow-hidden print:shadow-none print:border-none print:m-0"
@@ -134,7 +135,7 @@ const Resume = () => {
                         <p className="text-primary font-bold">{exp.company}</p>
                       </div>
                       <div className="text-slate-500 font-medium mt-1 md:mt-0 print:text-slate-600">
-                        {new Date(exp.startDate).toLocaleDateString(undefined, { month: 'short', year: 'numeric' })} - 
+                        {new Date(exp.startDate).toLocaleDateString(undefined, { month: 'short', year: 'numeric' })} -
                         {exp.current ? ' Present' : ` ${new Date(exp.endDate).toLocaleDateString(undefined, { month: 'short', year: 'numeric' })}`}
                       </div>
                     </div>
@@ -174,10 +175,17 @@ const Resume = () => {
                 </h2>
                 <div className="flex flex-wrap gap-3">
                   {skills.map((skill) => (
-                    <span 
+                    <span
                       key={skill._id}
-                      className="px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-lg text-sm font-bold print:bg-white print:border print:border-slate-200 print:text-slate-800"
+                      className="px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-lg text-sm font-bold print:bg-white print:border print:border-slate-200 print:text-slate-800 flex items-center gap-2"
                     >
+                      {skill.icon && (
+                        <img
+                          src={skill.icon}
+                          alt={`${skill.name} icon`}
+                          className="w-4 h-4 object-contain"
+                        />
+                      )}
                       {skill.name}
                     </span>
                   ))}

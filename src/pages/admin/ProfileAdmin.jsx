@@ -327,31 +327,43 @@ const ProfileAdmin = () => {
                                 <FileText size={16} className="text-slate-400" />
                                 Resume (PDF)
                             </label>
-                            <div className="flex items-center gap-4">
+                            <div className="space-y-3">
                                 <label className="flex items-center gap-2 px-4 py-3 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors text-slate-600 dark:text-slate-400 font-bold w-full">
                                     <CloudUpload size={20} />
-                                    <span className="truncate">Upload PDF Resume</span>
+                                    <span className="truncate">
+                                        {uploading ? 'Uploading...' : 'Upload PDF Resume'}
+                                    </span>
+                                    {uploading && <Loader size={16} className="animate-spin ml-auto" />}
                                     <input
                                         type="file"
                                         accept="application/pdf"
                                         onChange={handleResumeUpload}
                                         className="hidden"
+                                        disabled={uploading}
                                     />
                                 </label>
+                                {formData.resumeUrl && (
+                                    <div className="p-3 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 rounded-xl">
+                                        <div className="flex items-center justify-between gap-2">
+                                            <div className="flex items-center gap-2 min-w-0">
+                                                <FileText size={16} className="text-emerald-600 dark:text-emerald-400 flex-shrink-0" />
+                                                <span className="text-sm text-emerald-700 dark:text-emerald-300 font-medium truncate">
+                                                    Resume uploaded successfully
+                                                </span>
+                                            </div>
+                                            <a
+                                                href={formData.resumeUrl}
+                                                download
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="text-xs px-3 py-1 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors font-bold whitespace-nowrap"
+                                            >
+                                                Preview
+                                            </a>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
-                            {formData.resumeUrl && (
-                                <div className="mt-2 text-sm">
-                                    <span className="text-slate-500 mr-2">Current:</span>
-                                    <a
-                                        href={formData.resumeUrl}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="text-primary hover:underline font-medium break-all"
-                                    >
-                                        View Resume
-                                    </a>
-                                </div>
-                            )}
                         </div>
 
                         <div>

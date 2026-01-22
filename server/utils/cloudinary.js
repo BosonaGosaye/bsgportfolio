@@ -10,9 +10,25 @@ cloudinary.config({
 
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
-  params: {
-    folder: 'bsgportfolio',
-    allowed_formats: ['jpg', 'png', 'jpeg', 'webp', 'pdf'],
+  params: async (req, file) => {
+    // For PDFs, use raw resource type to enable direct download
+    const isPdf = file.mimetype === 'application/pdf';
+
+    if (isPdf) {
+      return {
+        folder: 'bsgportfolio',
+        resource_type: 'raw',
+        format: 'pdf',
+        public_id: `resume_${Date.now()}`,
+      };
+    } else {
+      // For images
+      return {
+        folder: 'bsgportfolio',
+        resource_type: 'auto',
+        allowed_formats: ['jpg', 'png', 'jpeg', 'webp'],
+      };
+    }
   },
 });
 
