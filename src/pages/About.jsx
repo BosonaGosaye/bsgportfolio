@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Github, Linkedin, Twitter, Instagram, Mail } from 'lucide-react';
+import { Github, Linkedin, Twitter, Instagram, Mail, Download, Sparkles } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { getProfile, getEducation, getExperience, getSkills, getCertifications } from '../services/api';
 import TimelineItem from '../components/TimelineItem';
@@ -88,6 +88,14 @@ const About = () => {
     return acc;
   }, {});
 
+  // Social links configuration
+  const socialLinks = [
+    { icon: Github, url: profile?.socialLinks?.github, label: 'GitHub' },
+    { icon: Linkedin, url: profile?.socialLinks?.linkedin, label: 'LinkedIn' },
+    { icon: Twitter, url: profile?.socialLinks?.twitter, label: 'Twitter' },
+    { icon: Instagram, url: profile?.socialLinks?.instagram, label: 'Instagram' },
+  ];
+
   return (
     <>
       <Meta
@@ -96,139 +104,273 @@ const About = () => {
         image={profile?.profileImage}
       />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        {/* Profile Overview */}
-        <section className="mb-24">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8 }}
-            >
-              <img
-                src={profile?.profileImage}
-                alt={profile?.name}
-                className="w-full max-w-md mx-auto rounded-2xl shadow-2xl border-4 border-white dark:border-slate-800"
-              />
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-            >
-              <h1 className="text-4xl font-bold mb-6">About Me</h1>
-              <div className="prose prose-lg dark:prose-invert max-w-none text-slate-600 dark:text-slate-400">
-                <ReactMarkdown>{profile?.bio}</ReactMarkdown>
-              </div>
-              <div className="mt-8 flex space-x-6">
-                {profile?.socialLinks?.github && (
-                  <a href={profile.socialLinks.github} target="_blank" rel="noopener noreferrer" className="text-slate-600 dark:text-slate-400 hover:text-primary transition-colors">
-                    <Github size={28} />
-                  </a>
-                )}
-                {profile?.socialLinks?.linkedin && (
-                  <a href={profile.socialLinks.linkedin} target="_blank" rel="noopener noreferrer" className="text-slate-600 dark:text-slate-400 hover:text-primary transition-colors">
-                    <Linkedin size={28} />
-                  </a>
-                )}
-                {profile?.socialLinks?.twitter && (
-                  <a href={profile.socialLinks.twitter} target="_blank" rel="noopener noreferrer" className="text-slate-600 dark:text-slate-400 hover:text-primary transition-colors">
-                    <Twitter size={28} />
-                  </a>
-                )}
-                {profile?.socialLinks?.instagram && (
-                  <a href={profile.socialLinks.instagram} target="_blank" rel="noopener noreferrer" className="text-slate-600 dark:text-slate-400 hover:text-primary transition-colors">
-                    <Instagram size={28} />
-                  </a>
-                )}
-                {profile?.email && (
-                  <a href={`mailto:${profile.email}`} className="text-slate-600 dark:text-slate-400 hover:text-primary transition-colors">
-                    <Mail size={28} />
-                  </a>
-                )}
-              </div>
-            </motion.div>
-          </div>
-        </section>
+      <div className="relative overflow-hidden">
+        {/* Animated Background Gradient */}
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-purple-500/5 to-pink-500/5 animate-gradient-shift pointer-events-none" />
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
-          {/* Experience Section */}
-          <section>
-            <SectionHeader title="Experience" />
-            <div className="mt-8">
-              {experience.length > 0 ? (
-                experience.map((exp) => (
-                  <TimelineItem
-                    key={exp._id}
-                    title={exp.position}
-                    subtitle={exp.company}
-                    duration={`${new Date(exp.startDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })} - ${exp.current ? 'Present' : new Date(exp.endDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}`}
-                    description={exp.description}
-                  />
-                ))
-              ) : (
-                <p className="text-slate-500">No experience records found.</p>
-              )}
-            </div>
-          </section>
-
-          {/* Education Section */}
-          <section>
-            <SectionHeader title="Education" />
-            <div className="mt-8">
-              {education.length > 0 ? (
-                education.map((edu) => (
-                  <TimelineItem
-                    key={edu._id}
-                    title={edu.degree}
-                    subtitle={edu.institution}
-                    duration={`${new Date(edu.startDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })} - ${edu.current ? 'Present' : new Date(edu.endDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}`}
-                    description={edu.description}
-                  />
-                ))
-              ) : (
-                <p className="text-slate-500">No education records found.</p>
-              )}
-            </div>
-          </section>
-        </div>
-
-        {/* Skills & Tools */}
-        <section className="mt-24">
-          <SectionHeader title="Skills & Tools" subtitle="My technical expertise across different domains." />
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 mt-12">
-            {Object.entries(skillsByCategory).map(([category, categorySkills]) => (
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 relative z-10">
+          {/* Profile Overview - Hero Section */}
+          <section className="mb-32">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+              {/* Profile Image */}
               <motion.div
-                key={category}
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.8, ease: 'easeOut' }}
+                className="relative group"
+              >
+                <div className="relative w-full max-w-md mx-auto">
+                  {/* Animated Glow Ring */}
+                  <div className="absolute -inset-4 bg-gradient-to-r from-primary via-purple-500 to-pink-500 rounded-3xl blur-2xl opacity-30 group-hover:opacity-50 transition-opacity duration-500 animate-pulse" />
+
+                  {/* Image Container */}
+                  <motion.div
+                    whileHover={{ scale: 1.02 }}
+                    transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                    className="relative"
+                  >
+                    <img
+                      src={profile?.profileImage}
+                      alt={profile?.name}
+                      className="relative w-full rounded-3xl shadow-2xl border-4 border-white dark:border-slate-800 z-10"
+                    />
+                    {/* Decorative Corner Elements */}
+                    <div className="absolute -top-6 -right-6 w-24 h-24 bg-gradient-to-br from-primary to-purple-500 rounded-2xl opacity-20 blur-xl group-hover:scale-110 transition-transform duration-500" />
+                    <div className="absolute -bottom-6 -left-6 w-32 h-32 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl opacity-20 blur-xl group-hover:scale-110 transition-transform duration-500" />
+                  </motion.div>
+                </div>
+              </motion.div>
+
+              {/* Bio Content */}
+              <motion.div
+                initial={{ opacity: 0, x: 50 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                className="relative"
+              >
+                {/* Glassmorphism Container */}
+                <div className="relative bg-white/60 dark:bg-slate-800/60 backdrop-blur-xl rounded-3xl p-8 shadow-xl border border-slate-200/50 dark:border-slate-700/50">
+                  <div className="flex items-center gap-3 mb-6">
+                    <Sparkles className="w-8 h-8 text-primary animate-pulse" />
+                    <h1 className="text-4xl font-bold bg-gradient-to-r from-primary via-purple-600 to-pink-600 bg-clip-text text-transparent">
+                      About Me
+                    </h1>
+                  </div>
+
+                  <div className="prose prose-lg dark:prose-invert max-w-none text-slate-600 dark:text-slate-400 mb-8">
+                    <ReactMarkdown>{profile?.bio}</ReactMarkdown>
+                  </div>
+
+                  {/* Social Links */}
+                  <div className="flex flex-wrap gap-4 mb-6">
+                    {socialLinks.map(({ icon: Icon, url, label }) => url && (
+                      <motion.a
+                        key={label}
+                        href={url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        whileHover={{ scale: 1.1, y: -2 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="p-3 bg-slate-100 dark:bg-slate-700/50 rounded-xl text-slate-600 dark:text-slate-400 hover:text-primary hover:bg-primary/10 dark:hover:bg-primary/20 transition-all duration-300 shadow-md hover:shadow-lg"
+                        aria-label={label}
+                      >
+                        <Icon size={24} />
+                      </motion.a>
+                    ))}
+                    {profile?.email && (
+                      <motion.a
+                        href={`mailto:${profile.email}`}
+                        whileHover={{ scale: 1.1, y: -2 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="p-3 bg-slate-100 dark:bg-slate-700/50 rounded-xl text-slate-600 dark:text-slate-400 hover:text-primary hover:bg-primary/10 dark:hover:bg-primary/20 transition-all duration-300 shadow-md hover:shadow-lg"
+                        aria-label="Email"
+                      >
+                        <Mail size={24} />
+                      </motion.a>
+                    )}
+                  </div>
+
+                  {/* Download Resume Button */}
+                  {profile?.resumeUrl && (
+                    <motion.a
+                      href={profile.resumeUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-primary to-purple-600 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+                    >
+                      <Download size={20} />
+                      Download Resume
+                    </motion.a>
+                  )}
+                </div>
+              </motion.div>
+            </div>
+          </section>
+
+          {/* Experience & Education Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 mb-32">
+            {/* Experience Section */}
+            <motion.section
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+            >
+              <SectionHeader title="Experience" />
+              <div className="mt-8 space-y-6">
+                {experience.length > 0 ? (
+                  experience.map((exp, index) => (
+                    <motion.div
+                      key={exp._id}
+                      initial={{ opacity: 0, x: -20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: index * 0.1 }}
+                    >
+                      <TimelineItem
+                        title={exp.position}
+                        subtitle={exp.company}
+                        duration={`${new Date(exp.startDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })} - ${exp.current ? 'Present' : new Date(exp.endDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}`}
+                        description={exp.description}
+                        type="experience"
+                      />
+                    </motion.div>
+                  ))
+                ) : (
+                  <p className="text-slate-500 text-center py-8">No experience records found.</p>
+                )}
+              </div>
+            </motion.section>
+
+            {/* Education Section */}
+            <motion.section
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+            >
+              <SectionHeader title="Education" />
+              <div className="mt-8 space-y-6">
+                {education.length > 0 ? (
+                  education.map((edu, index) => (
+                    <motion.div
+                      key={edu._id}
+                      initial={{ opacity: 0, x: -20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: index * 0.1 }}
+                    >
+                      <TimelineItem
+                        title={edu.degree}
+                        subtitle={edu.institution}
+                        duration={`${new Date(edu.startDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })} - ${edu.current ? 'Present' : new Date(edu.endDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}`}
+                        description={edu.description}
+                        type="education"
+                      />
+                    </motion.div>
+                  ))
+                ) : (
+                  <p className="text-slate-500 text-center py-8">No education records found.</p>
+                )}
+              </div>
+            </motion.section>
+          </div>
+
+          {/* Skills & Tools */}
+          <motion.section
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="mb-32"
+          >
+            <SectionHeader
+              title="Skills & Tools"
+              subtitle="My technical expertise across different domains."
+            />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
+              {Object.entries(skillsByCategory).map(([category, categorySkills], index) => (
+                <motion.div
+                  key={category}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 }}
+                  whileHover={{ y: -4 }}
+                  className="relative bg-white/60 dark:bg-slate-800/60 backdrop-blur-xl p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-slate-200/50 dark:border-slate-700/50 overflow-hidden group"
+                >
+                  {/* Gradient Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+                  <div className="relative z-10">
+                    <h3 className="text-xl font-bold mb-6 bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+                      {category}
+                    </h3>
+                    <div className="space-y-4">
+                      {categorySkills.map((skill) => (
+                        <SkillBar key={skill._id} skill={skill} />
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Decorative Element */}
+                  <div className="absolute -bottom-8 -right-8 w-32 h-32 bg-gradient-to-br from-primary/10 to-purple-500/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500" />
+                </motion.div>
+              ))}
+            </div>
+          </motion.section>
+
+          {/* Certifications - Featured Section */}
+          <motion.section
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="mb-20"
+          >
+            <div className="text-center mb-12">
+              <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="bg-slate-50 dark:bg-slate-800/30 p-8 rounded-2xl"
+                className="inline-block"
               >
-                <h3 className="text-xl font-bold mb-6 text-primary">{category}</h3>
-                <div className="space-y-4">
-                  {categorySkills.map((skill) => (
-                    <SkillBar key={skill._id} skill={skill} />
-                  ))}
-                </div>
+                <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-primary via-purple-600 to-pink-600 bg-clip-text text-transparent">
+                  Certifications & Achievements
+                </h2>
+                <p className="text-slate-600 dark:text-slate-400 text-lg">
+                  Professional certifications and credentials
+                </p>
               </motion.div>
-            ))}
-          </div>
-        </section>
+            </div>
 
-        {/* Certifications */}
-        <section className="mt-24">
-          <SectionHeader title="Certifications" subtitle="Professional certifications and achievements." />
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
-            {certifications.length > 0 ? (
-              certifications.map((cert) => (
-                <CertificationCard key={cert._id} cert={cert} />
-              ))
-            ) : (
-              <p className="col-span-full text-center text-slate-500 py-12">No certifications added yet.</p>
-            )}
-          </div>
-        </section>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {certifications.length > 0 ? (
+                certifications.map((cert, index) => (
+                  <motion.div
+                    key={cert._id}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: index * 0.1 }}
+                  >
+                    <CertificationCard cert={cert} />
+                  </motion.div>
+                ))
+              ) : (
+                <div className="col-span-full text-center py-16">
+                  <div className="inline-block p-8 bg-slate-100 dark:bg-slate-800/50 rounded-2xl">
+                    <p className="text-slate-500 dark:text-slate-400 text-lg">
+                      No certifications added yet.
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
+          </motion.section>
+        </div>
       </div>
     </>
   );
