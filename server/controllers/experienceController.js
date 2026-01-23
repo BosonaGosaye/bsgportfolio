@@ -25,4 +25,39 @@ const createExperience = async (req, res) => {
   }
 };
 
-module.exports = { getExperience, createExperience };
+// @desc    Update experience record
+// @route   PUT /api/experience/:id
+// @access  Private/Admin
+const updateExperience = async (req, res) => {
+  try {
+    const experience = await Experience.findById(req.params.id);
+    if (!experience) {
+      return res.status(404).json({ message: 'Experience record not found' });
+    }
+
+    Object.assign(experience, req.body);
+    const updatedExperience = await experience.save();
+    res.json(updatedExperience);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+// @desc    Delete experience record
+// @route   DELETE /api/experience/:id
+// @access  Private/Admin
+const deleteExperience = async (req, res) => {
+  try {
+    const experience = await Experience.findById(req.params.id);
+    if (!experience) {
+      return res.status(404).json({ message: 'Experience record not found' });
+    }
+
+    await experience.deleteOne();
+    res.json({ message: 'Experience record deleted' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+module.exports = { getExperience, createExperience, updateExperience, deleteExperience };
