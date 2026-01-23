@@ -160,10 +160,10 @@ const About = () => {
                 experience.map((exp) => (
                   <TimelineItem
                     key={exp._id}
-                    title={exp.role}
+                    title={exp.position}
                     subtitle={exp.company}
-                    duration={exp.duration}
-                    responsibilities={exp.responsibilities}
+                    duration={`${new Date(exp.startDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })} - ${exp.current ? 'Present' : new Date(exp.endDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}`}
+                    description={exp.description}
                   />
                 ))
               ) : (
@@ -182,7 +182,7 @@ const About = () => {
                     key={edu._id}
                     title={edu.degree}
                     subtitle={edu.institution}
-                    duration={edu.duration}
+                    duration={`${new Date(edu.startDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })} - ${edu.current ? 'Present' : new Date(edu.endDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}`}
                     description={edu.description}
                   />
                 ))
