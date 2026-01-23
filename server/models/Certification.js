@@ -5,6 +5,7 @@ const certificationSchema = new mongoose.Schema({
   issuer: { type: String, required: true },
   date: { type: Date, required: true },
   url: { type: String },
+  status: { type: String, enum: ['Active', 'Expired', 'In Progress'], default: 'Active' },
   order: { type: Number, default: 0 }
 }, { timestamps: true });
 

@@ -34,7 +34,7 @@ const AboutAdmin = () => {
     // Initial Form States
     const initialExperience = { position: '', company: '', startDate: '', endDate: '', description: '', current: false };
     const initialEducation = { degree: '', institution: '', startDate: '', endDate: '', description: '', current: false };
-    const initialCertification = { name: '', issuer: '', date: '', url: '' };
+    const initialCertification = { name: '', issuer: '', date: '', url: '', status: 'Active' };
 
     const [formData, setFormData] = useState({});
 
@@ -359,6 +359,19 @@ const AboutAdmin = () => {
                                             onChange={handleInputChange}
                                             className="w-full px-4 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:ring-2 focus:ring-primary outline-none"
                                         />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-bold mb-2">Status</label>
+                                        <select
+                                            name="status"
+                                            value={formData.status || 'Active'}
+                                            onChange={handleInputChange}
+                                            className="w-full px-4 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:ring-2 focus:ring-primary outline-none appearance-none cursor-pointer"
+                                        >
+                                            <option value="Active">Active</option>
+                                            <option value="Expired">Expired</option>
+                                            <option value="In Progress">In Progress</option>
+                                        </select>
                                     </div>
                                 </>
                             )}
