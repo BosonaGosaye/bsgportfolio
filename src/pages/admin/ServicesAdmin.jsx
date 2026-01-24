@@ -419,7 +419,7 @@ const ServicesAdmin = () => {
                                             value={formData.price}
                                             onChange={handleInputChange}
                                             className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-primary dark:bg-slate-700"
-                                            placeholder="e.g., Starting at $500"
+                                            placeholder="e.g., Starting at 5000 ETB"
                                         />
                                     </div>
                                     <div>
