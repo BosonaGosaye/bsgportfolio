@@ -35,7 +35,7 @@ const Footer = () => {
               <a href="#" className="text-slate-200 hover:text-white transition-colors">
                 <Instagram size={24} />
               </a>
-              <a href="mailto:contact@example.com" className="text-slate-200 hover:text-white transition-colors">
+              <a href={`mailto:${profile.email}`} className="text-slate-200 hover:text-white transition-colors">
                 <Mail size={24} />
               </a>
             </div>

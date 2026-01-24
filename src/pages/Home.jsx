@@ -256,7 +256,6 @@ const Home = () => {
             {[
               { icon: Code, label: 'Projects Completed', value: projects.length, suffix: '+' },
               { icon: Briefcase, label: 'Years Experience', value: 3, suffix: '+' },
-              { icon: Users, label: 'Happy Clients', value: 15, suffix: '+' },
               { icon: Award, label: 'Certifications', value: 5, suffix: '' }
             ].map((stat, index) => (
               <motion.div
