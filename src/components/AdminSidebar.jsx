@@ -17,6 +17,7 @@ const AdminSidebar = () => {
     { name: 'Overview', path: '/admin/dashboard', icon: LayoutDashboard },
     { name: 'Projects', path: '/admin/projects', icon: Briefcase },
     { name: 'Blog', path: '/admin/blog', icon: BookOpen },
+    { name: 'Services', path: '/admin/services', icon: Briefcase },
     { name: 'About / Resume', path: '/admin/about', icon: Briefcase },
     { name: 'Skills', path: '/admin/skills', icon: Settings },
     { name: 'Profile', path: '/admin/profile', icon: User },

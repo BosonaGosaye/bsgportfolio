@@ -1,6 +1,7 @@
 const Project = require('../models/Project');
 const Blog = require('../models/Blog');
 const Message = require('../models/Message');
+const Service = require('../models/Service');
 
 // @desc    Get admin dashboard statistics
 // @route   GET /api/admin/stats
@@ -10,7 +11,8 @@ const getAdminStats = async (req, res) => {
     const totalProjects = await Project.countDocuments();
     const totalBlogs = await Blog.countDocuments();
     const totalMessages = await Message.countDocuments();
-    
+    const totalServices = await Service.countDocuments();
+
     const blogStats = await Blog.aggregate([
       {
         $group: {
@@ -46,6 +48,7 @@ const getAdminStats = async (req, res) => {
         totalProjects,
         totalBlogs,
         totalMessages,
+        totalServices,
         totalViews
       },
       charts: {

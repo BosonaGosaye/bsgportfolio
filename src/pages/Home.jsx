@@ -3,10 +3,11 @@ import { motion, useInView } from 'framer-motion';
 import { ArrowRight, Download, Mail, Code, Briefcase, Users, Award, Sparkles, TrendingUp } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
-import { getProfile, getProjects, getSkills, getBlogs } from '../services/api';
+import { getProfile, getProjects, getSkills, getBlogs, getServices } from '../services/api';
 import ProjectCard from '../components/ProjectCard';
 import BlogCard from '../components/BlogCard';
 import SkillBar from '../components/SkillBar';
+import ServiceCard from '../components/ServiceCard';
 import SkeletonLoader from '../components/SkeletonLoader';
 import Meta from '../components/Meta';
 import { useRef } from 'react';
@@ -88,6 +89,7 @@ const Home = () => {
   const [projects, setProjects] = useState([]);
   const [skills, setSkills] = useState([]);
   const [blogs, setBlogs] = useState([]);
+  const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -95,17 +97,20 @@ const Home = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const [profileRes, projectsRes, skillsRes, blogsRes] = await Promise.all([
+        const [profileRes, projectsRes, skillsRes, blogsRes, servicesRes] = await Promise.all([
           getProfile(),
           getProjects(true),
           getSkills(),
-          getBlogs({ limit: 3 })
+          getBlogs({ limit: 3 }),
+          getServices()
         ]);
 
         setProfile(profileRes.data);
         setProjects(projectsRes.data);
         setSkills(skillsRes.data);
         setBlogs(blogsRes.data);
+        const servicesData = servicesRes.data?.data || servicesRes.data || [];
+        setServices(Array.isArray(servicesData) ? servicesData.filter(s => s.featured).slice(0, 3) : []);
       } catch (err) {
         console.error('Error fetching home data:', err);
         setError('Failed to load content. Please try again later.');
@@ -349,6 +354,47 @@ const Home = () => {
             ) : (
               <p className="col-span-full text-center text-slate-500">No projects found.</p>
             )}
+          </div>
+        </div>
+      </section>
+
+      {/* Services Preview */}
+      <section className="py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="flex justify-between items-end mb-12"
+          >
+            <div>
+              <h2 className="text-3xl font-bold mb-4 bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">Services I Offer</h2>
+              <p className="text-slate-600 dark:text-slate-400">Professional solutions tailored to your needs.</p>
+            </div>
+            <Link to="/services" className="hidden md:flex items-center text-primary font-bold hover:underline group">
+              View All Services <ArrowRight size={20} className="ml-2 group-hover:translate-x-2 transition-transform" />
+            </Link>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {loading ? (
+              [...Array(3)].map((_, i) => <SkeletonLoader key={i} />)
+            ) : services.length > 0 ? (
+              services.map((service, index) => (
+                <ServiceCard key={service._id} service={service} index={index} />
+              ))
+            ) : (
+              <p className="col-span-full text-center text-slate-500">No services available yet.</p>
+            )}
+          </div>
+
+          <div className="text-center mt-12 md:hidden">
+            <Link
+              to="/services"
+              className="inline-flex items-center text-primary font-bold hover:underline group"
+            >
+              View All Services <ArrowRight size={20} className="ml-2 group-hover:translate-x-2 transition-transform" />
+            </Link>
           </div>
         </div>
       </section>

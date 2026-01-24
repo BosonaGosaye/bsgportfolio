@@ -87,6 +87,19 @@ export const deleteCertification = (id, token) => api.delete(`/certifications/${
   headers: { Authorization: `Bearer ${token}` }
 });
 
+// Services
+export const getServices = () => api.get('/services');
+export const getServiceById = (id) => api.get(`/services/${id}`);
+export const createService = (data, token) => api.post('/services', data, {
+  headers: { Authorization: `Bearer ${token}` }
+});
+export const updateService = (id, data, token) => api.put(`/services/${id}`, data, {
+  headers: { Authorization: `Bearer ${token}` }
+});
+export const deleteService = (id, token) => api.delete(`/services/${id}`, {
+  headers: { Authorization: `Bearer ${token}` }
+});
+
 // Auth & Messages
 export const login = (credentials) => api.post('/auth/login', credentials);
 export const sendMessage = (messageData) => api.post('/messages', messageData);

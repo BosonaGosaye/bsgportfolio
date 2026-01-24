@@ -7,11 +7,13 @@ import Blogs from './pages/Blogs';
 import BlogDetail from './pages/BlogDetail';
 import Contact from './pages/Contact';
 import Resume from './pages/Resume';
+import Services from './pages/Services';
 import Login from './pages/admin/Login';
 import Dashboard from './pages/admin/Dashboard';
 import ProjectsAdmin from './pages/admin/ProjectsAdmin';
 import BlogsAdmin from './pages/admin/BlogsAdmin';
 import SkillsAdmin from './pages/admin/SkillsAdmin';
+import ServicesAdmin from './pages/admin/ServicesAdmin';
 import ProfileAdmin from './pages/admin/ProfileAdmin';
 import MessagesAdmin from './pages/admin/MessagesAdmin';
 import AboutAdmin from './pages/admin/AboutAdmin';
@@ -34,6 +36,7 @@ function App() {
             <Route path="/projects/:slug" element={<><Navbar /><main className="flex-grow"><ProjectDetail /></main><Footer /></>} />
             <Route path="/blog" element={<><Navbar /><main className="flex-grow"><Blogs /></main><Footer /></>} />
             <Route path="/blog/:slug" element={<><Navbar /><main className="flex-grow"><BlogDetail /></main><Footer /></>} />
+            <Route path="/services" element={<><Navbar /><main className="flex-grow"><Services /></main><Footer /></>} />
             <Route path="/resume" element={<><Navbar /><main className="flex-grow"><Resume /></main><Footer /></>} />
             <Route path="/contact" element={<><Navbar /><main className="flex-grow"><Contact /></main><Footer /></>} />
 
@@ -46,6 +49,7 @@ function App() {
                 <Route path="dashboard" element={<Dashboard />} />
                 <Route path="projects" element={<ProjectsAdmin />} />
                 <Route path="blog" element={<BlogsAdmin />} />
+                <Route path="services" element={<ServicesAdmin />} />
                 <Route path="skills" element={<SkillsAdmin />} />
                 <Route path="profile" element={<ProfileAdmin />} />
                 <Route path="about" element={<AboutAdmin />} />

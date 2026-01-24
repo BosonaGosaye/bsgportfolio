@@ -7,7 +7,8 @@ import {
   Eye,
   TrendingUp,
   Mail,
-  PlusCircle
+  PlusCircle,
+  Wrench
 } from 'lucide-react';
 import {
   BarChart,
@@ -58,8 +59,8 @@ const Dashboard = () => {
   const stats = [
     { label: 'Total Projects', count: data?.stats?.totalProjects || 0, icon: Briefcase, color: 'bg-blue-500' },
     { label: 'Blog Posts', count: data?.stats?.totalBlogs || 0, icon: BookOpen, color: 'bg-emerald-500' },
+    { label: 'Services', count: data?.stats?.totalServices || 0, icon: Wrench, color: 'bg-orange-500' },
     { label: 'Messages', count: data?.stats?.totalMessages || 0, icon: MessageSquare, color: 'bg-amber-500' },
-    { label: 'Total Views', count: data?.stats?.totalViews || 0, icon: Eye, color: 'bg-purple-500' },
   ];
 
   return (

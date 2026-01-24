@@ -282,7 +282,7 @@ const Contact = () => {
                       value={formData.name}
                       onChange={handleChange}
                       className={`w-full px-4 py-3 rounded-xl border ${errors.name ? 'border-red-500 focus:ring-red-500' : 'border-slate-200 dark:border-slate-700 focus:ring-primary'} bg-slate-50 dark:bg-slate-900/50 focus:outline-none focus:ring-2 transition-all`}
-                      placeholder="John Doe"
+                      placeholder="Bosona Gosaye"
                     />
                     <AnimatePresence>
                       {errors.name && (
@@ -306,7 +306,7 @@ const Contact = () => {
                       value={formData.email}
                       onChange={handleChange}
                       className={`w-full px-4 py-3 rounded-xl border ${errors.email ? 'border-red-500 focus:ring-red-500' : 'border-slate-200 dark:border-slate-700 focus:ring-primary'} bg-slate-50 dark:bg-slate-900/50 focus:outline-none focus:ring-2 transition-all`}
-                      placeholder="john@example.com"
+                      placeholder="bsg@example.com"
                     />
                     <AnimatePresence>
                       {errors.email && (
