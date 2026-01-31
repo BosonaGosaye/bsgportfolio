@@ -416,17 +416,20 @@ const Home = () => {
             {loading ? (
               [...Array(6)].map((_, i) => <SkeletonLoader key={i} type="bar" />)
             ) : skills.length > 0 ? (
-              skills.slice(0, 6).map((skill, index) => (
-                <motion.div
-                  key={skill._id}
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 }}
-                >
-                  <SkillBar skill={skill} />
-                </motion.div>
-              ))
+              skills
+                .filter(skill => skill.category === 'Tools & Technologies')
+                .slice(0, 6)
+                .map((skill, index) => (
+                  <motion.div
+                    key={skill._id}
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: index * 0.1 }}
+                  >
+                    <SkillBar skill={skill} />
+                  </motion.div>
+                ))
             ) : (
               <p className="col-span-full text-center text-slate-500">No skills added yet.</p>
             )}

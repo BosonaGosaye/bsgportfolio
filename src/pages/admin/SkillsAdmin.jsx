@@ -26,6 +26,7 @@ const SkillsAdmin = () => {
     // Modal State
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingSkill, setEditingSkill] = useState(null);
+    const [showPercentage, setShowPercentage] = useState(true);
 
     // Delete Modal State
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -71,14 +72,17 @@ const SkillsAdmin = () => {
     const handleOpenModal = (skill = null) => {
         if (skill) {
             setEditingSkill(skill);
+            const hasPercentage = skill.percentage !== undefined && skill.percentage !== null;
+            setShowPercentage(hasPercentage);
             setFormData({
                 name: skill.name,
                 category: skill.category,
-                percentage: skill.percentage,
+                percentage: hasPercentage ? skill.percentage : 80,
                 icon: skill.icon || ''
             });
         } else {
             setEditingSkill(null);
+            setShowPercentage(true);
             setFormData({
                 name: '',
                 category: 'Frontend',
@@ -106,12 +110,17 @@ const SkillsAdmin = () => {
         e.preventDefault();
         setFormLoading(true);
 
+        const dataToSubmit = {
+            ...formData,
+            percentage: showPercentage ? formData.percentage : null
+        };
+
         try {
             if (editingSkill) {
-                const res = await updateSkill(editingSkill._id, formData, user.token);
+                const res = await updateSkill(editingSkill._id, dataToSubmit, user.token);
                 setSkills(prev => prev.map(s => s._id === editingSkill._id ? res.data : s));
             } else {
-                const res = await createSkill(formData, user.token);
+                const res = await createSkill(dataToSubmit, user.token);
                 setSkills(prev => [...prev, res.data]);
             }
             handleCloseModal();
@@ -275,16 +284,39 @@ const SkillsAdmin = () => {
                             </div>
 
                             <div>
-                                <label className="block text-sm font-bold mb-2">Proficiency ({formData.percentage}%)</label>
-                                <input
-                                    type="range"
-                                    name="percentage"
-                                    min="0"
-                                    max="100"
-                                    value={formData.percentage}
-                                    onChange={handleInputChange}
-                                    className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-primary"
-                                />
+                                <div className="flex items-center justify-between mb-2">
+                                    <label className="block text-sm font-bold">Proficiency</label>
+                                    <label className="relative inline-flex items-center cursor-pointer">
+                                        <input
+                                            type="checkbox"
+                                            className="sr-only peer"
+                                            checked={showPercentage}
+                                            onChange={(e) => setShowPercentage(e.target.checked)}
+                                        />
+                                        <div className="w-11 h-6 bg-slate-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"></div>
+                                        <span className="ml-2 text-xs font-medium text-slate-500 dark:text-slate-400">
+                                            {showPercentage ? 'Enabled' : 'Disabled'}
+                                        </span>
+                                    </label>
+                                </div>
+                                {showPercentage && (
+                                    <div className="space-y-2">
+                                        <div className="flex justify-between text-xs font-bold text-slate-500">
+                                            <span>Beginner</span>
+                                            <span>{formData.percentage}%</span>
+                                            <span>Expert</span>
+                                        </div>
+                                        <input
+                                            type="range"
+                                            name="percentage"
+                                            min="0"
+                                            max="100"
+                                            value={formData.percentage}
+                                            onChange={handleInputChange}
+                                            className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-primary"
+                                        />
+                                    </div>
+                                )}
                             </div>
 
                             <div>

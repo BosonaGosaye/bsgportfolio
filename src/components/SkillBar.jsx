@@ -37,56 +37,62 @@ const SkillBar = ({ skill }) => {
             {skill.name}
           </span>
         </div>
-        <div className="flex items-center gap-2">
-          <motion.span
-            className="text-xs font-bold text-primary"
-            initial={{ opacity: 0, x: -10 }}
-            animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -10 }}
-            transition={{ delay: 0.3 }}
-          >
-            {skill.percentage}%
-          </motion.span>
-        </div>
+        {skill.percentage !== undefined && skill.percentage !== null && (
+          <div className="flex items-center gap-2">
+            <motion.span
+              className="text-xs font-bold text-primary"
+              initial={{ opacity: 0, x: -10 }}
+              animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -10 }}
+              transition={{ delay: 0.3 }}
+            >
+              {skill.percentage}%
+            </motion.span>
+          </div>
+        )}
       </div>
 
       {/* Progress Bar Container */}
-      <div className="relative w-full bg-slate-200 dark:bg-slate-700/50 rounded-full h-3 overflow-hidden shadow-inner">
-        {/* Animated Progress Bar with Gradient */}
-        <motion.div
-          className="relative h-full rounded-full bg-gradient-to-r from-primary via-blue-500 to-purple-600 shadow-lg"
-          initial={{ width: 0 }}
-          animate={isInView ? { width: `${skill.percentage}%` } : { width: 0 }}
-          transition={{
-            duration: 1.2,
-            ease: [0.4, 0, 0.2, 1],
-            delay: 0.2
-          }}
-        >
-          {/* Shimmer Effect */}
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-shimmer" />
-
-          {/* Glow Effect on Hover */}
+      {(skill.percentage !== undefined && skill.percentage !== null) && (
+        <div className="relative w-full bg-slate-200 dark:bg-slate-700/50 rounded-full h-3 overflow-hidden shadow-inner">
+          {/* Animated Progress Bar with Gradient */}
           <motion.div
-            className="absolute inset-0 bg-gradient-to-r from-primary to-purple-600 blur-sm"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: isHovered ? 0.6 : 0 }}
-            transition={{ duration: 0.3 }}
-          />
-        </motion.div>
-      </div>
+            className="relative h-full rounded-full bg-gradient-to-r from-primary via-blue-500 to-purple-600 shadow-lg"
+            initial={{ width: 0 }}
+            animate={isInView ? { width: `${skill.percentage}%` } : { width: 0 }}
+            transition={{
+              duration: 1.2,
+              ease: [0.4, 0, 0.2, 1],
+              delay: 0.2
+            }}
+          >
+            {/* Shimmer Effect */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-shimmer" />
+
+            {/* Glow Effect on Hover */}
+            <motion.div
+              className="absolute inset-0 bg-gradient-to-r from-primary to-purple-600 blur-sm"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: isHovered ? 0.6 : 0 }}
+              transition={{ duration: 0.3 }}
+            />
+          </motion.div>
+        </div>
+      )}
 
       {/* Tooltip on Hover */}
-      <motion.div
-        initial={{ opacity: 0, y: -5 }}
-        animate={{
-          opacity: isHovered ? 1 : 0,
-          y: isHovered ? 0 : -5
-        }}
-        transition={{ duration: 0.2 }}
-        className="mt-2 text-xs font-semibold text-slate-500 dark:text-slate-400"
-      >
-        {getProficiencyLevel(skill.percentage)} Level
-      </motion.div>
+      {(skill.percentage !== undefined && skill.percentage !== null) && (
+        <motion.div
+          initial={{ opacity: 0, y: -5 }}
+          animate={{
+            opacity: isHovered ? 1 : 0,
+            y: isHovered ? 0 : -5
+          }}
+          transition={{ duration: 0.2 }}
+          className="mt-2 text-xs font-semibold text-slate-500 dark:text-slate-400"
+        >
+          {getProficiencyLevel(skill.percentage)} Level
+        </motion.div>
+      )}
     </div>
   );
 };
