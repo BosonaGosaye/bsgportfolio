@@ -57,7 +57,7 @@ const SkillsAdmin = () => {
         }
     };
 
-    const categories = ['Frontend', 'Backend', 'Mobile Application', 'Tools', 'Database & Cloud', 'DevOps & Deployment', 'Testing & Debugging', 'Design', 'Soft Skills', 'Other'];
+    const categories = ['Frontend', 'Backend', 'Mobile Application', 'Tools & Technologies', 'Database & Cloud', 'DevOps & Deployment', 'Testing & Debugging', 'Design', 'Soft Skills', 'Other'];
 
     const handleSearch = (e) => {
         setSearchQuery(e.target.value);
