@@ -418,7 +418,6 @@ const Home = () => {
             ) : skills.length > 0 ? (
               skills
                 .filter(skill => skill.category === 'Tools & Technologies')
-                .slice(0, 6)
                 .map((skill, index) => (
                   <motion.div
                     key={skill._id}
