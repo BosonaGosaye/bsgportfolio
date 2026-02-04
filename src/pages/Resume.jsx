@@ -8,6 +8,16 @@ const Resume = () => {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // Use Google Docs Viewer for mobile devices as they don't support inline PDFs in iframes well
+  const getPdfUrl = (url) => {
+    if (!url) return '';
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    if (isMobile) {
+      return `https://docs.google.com/viewer?url=${encodeURIComponent(url)}&embedded=true`;
+    }
+    return `${url}#view=FitH`;
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -66,11 +76,11 @@ const Resume = () => {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white dark:bg-slate-900 rounded-3xl overflow-hidden border border-slate-100 dark:border-slate-800 shadow-2xl min-h-[800px]"
+            className="bg-white dark:bg-slate-900 rounded-3xl overflow-hidden border border-slate-100 dark:border-slate-800 shadow-2xl min-h-[500px] md:min-h-[800px]"
           >
             <iframe
-              src={`${profile.resumeUrl}#view=FitH`}
-              className="w-full h-[800px] border-none"
+              src={getPdfUrl(profile.resumeUrl)}
+              className="w-full h-[500px] md:h-[800px] border-none"
               title="Resume PDF"
             ></iframe>
             <div className="p-4 bg-slate-50 dark:bg-slate-800/50 text-center border-t border-slate-100 dark:border-slate-800">
