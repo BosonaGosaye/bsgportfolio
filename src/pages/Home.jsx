@@ -115,7 +115,8 @@ const Home = () => {
         setEducation(eduRes.data?.data || eduRes.data || []);
         setExperience(expRes.data?.data || expRes.data || []);
         setProjects(projectsRes.data?.data || projectsRes.data || []);
-        setSkills(skillsRes.data?.data || skillsRes.data || []);
+        const allSkills = skillsRes.data?.data || skillsRes.data || [];
+        setSkills(allSkills.filter(skill => skill.category === 'Tools & Technologies'));
         setBlogs(blogsRes.data?.data || blogsRes.data || []);
         const servicesData = servicesRes.data?.data || servicesRes.data || [];
         setServices(Array.isArray(servicesData) ? servicesData.filter(s => s.featured).slice(0, 3) : []);
@@ -438,7 +439,7 @@ const Home = () => {
       {/* Skills Section */}
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <SectionHeader title="Core Skills" subtitle="My technical expertise and toolset." />
+          <SectionHeader title="Tools & Technologies" subtitle="My technical expertise and toolset." />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8 mt-12">
             {loading ? (
               [...Array(6)].map((_, i) => <SkeletonLoader key={i} type="bar" />)
