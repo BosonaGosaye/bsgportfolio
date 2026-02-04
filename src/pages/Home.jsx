@@ -209,6 +209,22 @@ const Home = () => {
                 </ReactMarkdown>
               </div>
 
+               <div className="flex flex-wrap gap-4 mb-8">
+                {socialLinks.map(({ icon: Icon, url, label }) => url && (
+                  <motion.a
+                    key={label}
+                    href={url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    whileHover={{ scale: 1.1, y: -2 }}
+                    className="p-3 bg-slate-100 dark:bg-slate-700/50 rounded-xl text-slate-600 dark:text-slate-400 hover:text-primary transition-all"
+                    aria-label={label}
+                  >
+                    <Icon size={24} />
+                  </motion.a>
+                ))}
+              </div>
+
               <div className="flex flex-wrap gap-4">
                 <Link
                   to="/contact"
