@@ -11,7 +11,6 @@ cloudinary.config({
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: async (req, file) => {
-    console.log('Uploading file:', file.originalname, 'MimeType:', file.mimetype);
     // For PDFs, use image resource type (Cloudinary handles PDFs better this way for public access)
     const isPdf = file.mimetype === 'application/pdf';
 

@@ -284,15 +284,11 @@ const Home = () => {
             >
               <div className="relative w-full max-w-md mx-auto">
                 <div className="absolute -inset-4 bg-gradient-to-r from-primary to-purple-500 rounded-3xl blur-2xl opacity-20" />
-                {loading ? (
-                  <div className="w-full aspect-[4/5] bg-slate-200 dark:bg-slate-800 rounded-3xl animate-pulse relative z-10" />
-                ) : (
-                  <img
-                    src={profile?.aboutImage || profile?.profileImage}
-                    alt="About Me"
-                    className="relative w-full rounded-3xl shadow-2xl border-4 border-white dark:border-slate-800 z-10 object-cover aspect-[4/5]"
-                  />
-                )}
+                <img
+                  src={profile?.aboutImage || profile?.profileImage}
+                  alt="About Me"
+                  className="relative w-full rounded-3xl shadow-2xl border-4 border-white dark:border-slate-800 z-10"
+                />
               </div>
             </motion.div>
 
