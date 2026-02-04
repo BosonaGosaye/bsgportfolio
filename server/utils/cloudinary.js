@@ -20,7 +20,6 @@ const storage = new CloudinaryStorage({
         resource_type: 'image', // Use 'image' instead of 'raw' to avoid 401 errors
         format: 'pdf',
         public_id: `resume_${Date.now()}`,
-        flags: 'attachment', // Force download
       };
     } else {
       // For images
