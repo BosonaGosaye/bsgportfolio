@@ -36,6 +36,15 @@ app.use('/api/experience', require('./routes/experienceRoutes'));
 app.use('/api/certifications', require('./routes/certificationRoutes'));
 app.use('/api/services', require('./routes/serviceRoutes'));
 
+// Error Handling Middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(err.status || 500).json({
+    message: err.message || 'Internal Server Error',
+    error: process.env.NODE_ENV === 'development' ? err : {}
+  });
+});
+
 app.get('/', (req, res) => {
   res.send('API is running...');
 });

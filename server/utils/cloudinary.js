@@ -11,6 +11,7 @@ cloudinary.config({
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: async (req, file) => {
+    console.log('Uploading file:', file.originalname, 'MimeType:', file.mimetype);
     // For PDFs, use image resource type (Cloudinary handles PDFs better this way for public access)
     const isPdf = file.mimetype === 'application/pdf';
 
@@ -26,8 +27,8 @@ const storage = new CloudinaryStorage({
       // For images
       return {
         folder: 'bsgportfolio',
-        resource_type: 'auto',
         allowed_formats: ['jpg', 'png', 'jpeg', 'webp'],
+        transformation: [{ width: 1000, height: 1000, crop: 'limit' }],
       };
     }
   },
