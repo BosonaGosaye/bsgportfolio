@@ -125,8 +125,8 @@ const Contact = () => {
             <Sparkles className="w-4 h-4 text-primary" />
             <span className="text-sm font-semibold text-primary">Let's Connect</span>
           </div>
-          <h1 className="text-4xl md:text-5xl font-extrabold mb-4 bg-gradient-to-r from-primary via-purple-600 to-pink-600 bg-clip-text text-transparent">Get In Touch</h1>
-          <p className="text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-black mb-8 tracking-tighter bg-gradient-to-r from-primary via-purple-600 to-pink-600 bg-clip-text text-transparent drop-shadow-sm">Get In Touch</h1>
+          <p className="text-xl md:text-2xl text-slate-700 dark:text-slate-300 max-w-3xl mx-auto leading-relaxed font-medium">
             Have a project in mind or just want to chat? Feel free to reach out using the form below or via my contact details.
           </p>
         </motion.div>
@@ -138,24 +138,24 @@ const Contact = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
-            <h2 className="text-2xl font-bold mb-8 flex items-center">
-              <MessageSquare className="mr-3 text-primary" size={28} />
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-black mb-12 flex items-center tracking-tighter text-slate-900 dark:text-white bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent uppercase">
+              <MessageSquare className="mr-4 text-primary shrink-0" size={40} />
               Contact Information
             </h2>
 
-            <div className="space-y-6">
+            <div className="space-y-10">
               {/* Email */}
               <motion.a
-                href={`mailto:${profile?.email || 'hello@example.com'}`}
-                whileHover={{ x: 4 }}
-                className="flex items-start group hover:bg-slate-50 dark:hover:bg-slate-800/50 p-4 rounded-2xl transition-all -mx-4"
+                href={`mailto:${profile?.email || 'bosona01234@gmail.com'}`}
+                whileHover={{ x: 10 }}
+                className="flex items-start group hover:bg-white dark:hover:bg-slate-800 p-6 rounded-[2.5rem] transition-all -mx-6 border-2 border-transparent hover:border-primary/20 shadow-none hover:shadow-2xl hover:shadow-primary/10"
               >
-                <div className="p-4 bg-primary/10 rounded-2xl text-primary mr-4 group-hover:bg-primary group-hover:text-white transition-colors">
-                  <Mail size={24} />
+                <div className="p-5 bg-primary/10 rounded-[1.5rem] text-primary mr-6 group-hover:bg-primary group-hover:text-white transition-all duration-500 shadow-sm group-hover:shadow-xl group-hover:shadow-primary/40 group-hover:rotate-6">
+                  <Mail size={32} />
                 </div>
                 <div>
-                  <h3 className="font-bold text-lg group-hover:text-primary transition-colors">Email</h3>
-                  <p className="text-slate-600 dark:text-slate-400 break-all">{profile?.email || 'hello@example.com'}</p>
+                  <h3 className="font-black text-2xl mb-2 group-hover:text-primary transition-colors tracking-tighter uppercase">Email</h3>
+                  <p className="text-slate-700 dark:text-slate-300 text-xl font-bold break-all leading-tight">{profile?.email || 'hello@example.com'}</p>
                 </div>
               </motion.a>
 
@@ -163,15 +163,15 @@ const Contact = () => {
               {profile?.phone && (
                 <motion.a
                   href={`tel:${profile.phone}`}
-                  whileHover={{ x: 4 }}
-                  className="flex items-start group hover:bg-slate-50 dark:hover:bg-slate-800/50 p-4 rounded-2xl transition-all -mx-4"
+                  whileHover={{ x: 10 }}
+                  className="flex items-start group hover:bg-white dark:hover:bg-slate-800 p-6 rounded-[2.5rem] transition-all -mx-6 border-2 border-transparent hover:border-primary/20 shadow-none hover:shadow-2xl hover:shadow-primary/10"
                 >
-                  <div className="p-4 bg-primary/10 rounded-2xl text-primary mr-4 group-hover:bg-primary group-hover:text-white transition-colors">
-                    <Phone size={24} />
+                  <div className="p-5 bg-primary/10 rounded-[1.5rem] text-primary mr-6 group-hover:bg-primary group-hover:text-white transition-all duration-500 shadow-sm group-hover:shadow-xl group-hover:shadow-primary/40 group-hover:rotate-6">
+                    <Phone size={32} />
                   </div>
                   <div>
-                    <h3 className="font-bold text-lg group-hover:text-primary transition-colors">Phone</h3>
-                    <p className="text-slate-600 dark:text-slate-400">{profile.phone}</p>
+                    <h3 className="font-black text-2xl mb-2 group-hover:text-primary transition-colors tracking-tighter uppercase">Phone</h3>
+                    <p className="text-slate-700 dark:text-slate-300 text-xl font-bold leading-tight">{profile.phone}</p>
                   </div>
                 </motion.a>
               )}
@@ -182,15 +182,15 @@ const Contact = () => {
                   href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(profile.location)}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  whileHover={{ x: 4 }}
-                  className="flex items-start group hover:bg-slate-50 dark:hover:bg-slate-800/50 p-4 rounded-2xl transition-all -mx-4"
+                  whileHover={{ x: 10 }}
+                  className="flex items-start group hover:bg-white dark:hover:bg-slate-800 p-6 rounded-[2.5rem] transition-all -mx-6 border-2 border-transparent hover:border-primary/20 shadow-none hover:shadow-2xl hover:shadow-primary/10"
                 >
-                  <div className="p-4 bg-primary/10 rounded-2xl text-primary mr-4 group-hover:bg-primary group-hover:text-white transition-colors">
-                    <MapPin size={24} />
+                  <div className="p-5 bg-primary/10 rounded-[1.5rem] text-primary mr-6 group-hover:bg-primary group-hover:text-white transition-all duration-500 shadow-sm group-hover:shadow-xl group-hover:shadow-primary/40 group-hover:rotate-6">
+                    <MapPin size={32} />
                   </div>
                   <div>
-                    <h3 className="font-bold text-lg group-hover:text-primary transition-colors">Location</h3>
-                    <p className="text-slate-600 dark:text-slate-400">{profile.location}</p>
+                    <h3 className="font-black text-2xl mb-2 group-hover:text-primary transition-colors tracking-tighter uppercase">Location</h3>
+                    <p className="text-slate-700 dark:text-slate-300 text-xl font-bold leading-tight">{profile.location}</p>
                   </div>
                 </motion.a>
               )}

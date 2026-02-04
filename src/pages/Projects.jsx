@@ -126,10 +126,10 @@ const Projects = () => {
             <Sparkles className="w-4 h-4 text-primary" />
             <span className="text-sm font-semibold text-primary">Portfolio</span>
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-primary via-purple-600 to-pink-600 bg-clip-text text-transparent">
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-black mb-8 tracking-tighter bg-gradient-to-r from-primary via-blue-600 to-purple-600 bg-clip-text text-transparent drop-shadow-sm">
             My Projects
           </h1>
-          <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
+          <p className="text-xl md:text-2xl text-slate-700 dark:text-slate-300 max-w-3xl mx-auto leading-relaxed font-medium">
             A collection of my work, experiments, and open-source contributions.
           </p>
         </motion.div>

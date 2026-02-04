@@ -149,15 +149,25 @@ const About = () => {
               >
                 {/* Glassmorphism Container */}
                 <div className="relative bg-white/60 dark:bg-slate-800/60 backdrop-blur-xl rounded-3xl p-8 shadow-xl border border-slate-200/50 dark:border-slate-700/50">
-                  <div className="flex items-center gap-3 mb-6">
-                    <Sparkles className="w-8 h-8 text-primary animate-pulse" />
-                    <h1 className="text-4xl font-bold bg-gradient-to-r from-primary via-purple-600 to-pink-600 bg-clip-text text-transparent">
+                  <div className="flex items-center gap-3 mb-10">
+                    <Sparkles className="w-10 h-10 text-primary animate-bounce" />
+                    <h1 className="text-5xl md:text-6xl lg:text-7xl font-black tracking-tighter bg-gradient-to-r from-primary via-purple-600 to-pink-600 bg-clip-text text-transparent">
                       About Me
                     </h1>
                   </div>
 
-                  <div className="prose prose-lg dark:prose-invert max-w-none text-slate-600 dark:text-slate-400 mb-8">
-                    <ReactMarkdown>{profile?.bio}</ReactMarkdown>
+                  <div className="prose prose-xl md:prose-2xl dark:prose-invert max-w-none mb-12 text-slate-700 dark:text-slate-300 leading-relaxed font-medium">
+                    <ReactMarkdown
+                      components={{
+                        p: ({ children }) => <p className="mb-8 leading-relaxed text-xl">{children}</p>,
+                        strong: ({ children }) => <strong className="text-primary dark:text-primary font-black border-b-4 border-primary/20">{children}</strong>,
+                        em: ({ children }) => <em className="text-purple-600 dark:text-purple-400 italic not-italic font-bold bg-purple-500/10 px-2 rounded-md">{children}</em>,
+                        li: ({ children }) => <li className="mb-4 text-xl list-none flex items-start gap-3"><span className="w-2 h-2 rounded-full bg-primary mt-3 shrink-0" />{children}</li>,
+                        a: ({ children, href }) => <a href={href} className="text-primary hover:text-blue-700 underline decoration-4 underline-offset-8 transition-all font-black" target="_blank" rel="noopener noreferrer">{children}</a>
+                      }}
+                    >
+                      {profile?.bio}
+                    </ReactMarkdown>
                   </div>
 
                   {/* Social Links */}
@@ -304,7 +314,7 @@ const About = () => {
                   <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
                   <div className="relative z-10">
-                    <h3 className="text-xl font-bold mb-6 bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+                    <h3 className="text-2xl md:text-3xl font-black mb-8 tracking-tighter bg-gradient-to-r from-primary via-blue-600 to-purple-600 bg-clip-text text-transparent uppercase">
                       {category}
                     </h3>
                     <div className="space-y-4">

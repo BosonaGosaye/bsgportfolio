@@ -122,10 +122,10 @@ const Blogs = () => {
             <Sparkles className="w-4 h-4 text-primary" />
             <span className="text-sm font-semibold text-primary">Blog</span>
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-primary via-purple-600 to-pink-600 bg-clip-text text-transparent">
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-black mb-8 tracking-tighter bg-gradient-to-r from-primary via-blue-600 to-purple-600 bg-clip-text text-transparent drop-shadow-sm">
             Latest Articles
           </h1>
-          <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
+          <p className="text-xl md:text-2xl text-slate-700 dark:text-slate-300 max-w-3xl mx-auto leading-relaxed font-medium">
             Sharing knowledge, experiences, and the latest trends in technology.
           </p>
         </motion.div>
@@ -161,10 +161,10 @@ const Blogs = () => {
                       <span>{new Date(featuredBlog.publishedAt || featuredBlog.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
                     </div>
                   </div>
-                  <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 group-hover:text-primary transition-colors">
+                  <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-8 group-hover:text-primary transition-all tracking-tighter leading-[1.1]">
                     {featuredBlog.title}
                   </h2>
-                  <p className="text-white/90 text-lg mb-6 line-clamp-2">
+                  <p className="text-white/90 text-xl md:text-2xl mb-10 line-clamp-2 leading-relaxed max-w-4xl font-medium">
                     {featuredBlog.excerpt}
                   </p>
                   <div className="flex flex-wrap gap-2">

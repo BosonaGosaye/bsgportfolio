@@ -190,16 +190,23 @@ const Home = () => {
                 <span className="text-sm font-semibold text-primary">Welcome to my portfolio</span>
               </motion.div>
 
-              <h1 className="text-4xl md:text-6xl font-extrabold mb-6 leading-tight">
-                Hi, I'm <span className="bg-gradient-to-r from-primary via-blue-600 to-purple-600 bg-clip-text text-transparent">{profile?.name || '...'}</span>
+              <h1 className="text-5xl md:text-7xl lg:text-8xl font-black mb-8 leading-[1.05] tracking-tighter text-slate-900 dark:text-white">
+                Hi, I'm <span className="bg-gradient-to-r from-primary via-blue-600 to-purple-600 bg-clip-text text-transparent drop-shadow-sm">{profile?.name || '...'}</span>
               </h1>
 
-              <h2 className="text-2xl md:text-3xl font-bold text-slate-600 dark:text-slate-400 mb-6 min-h-[3rem]">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-slate-700 dark:text-slate-300 mb-10 min-h-[4rem] tracking-tight">
                 {!loading && <TypingAnimation texts={typingTexts} />}
               </h2>
 
-              <div className="prose prose-lg dark:prose-invert max-w-xl mb-8">
-                <ReactMarkdown>{profile?.shortBio || '...'}</ReactMarkdown>
+              <div className="prose prose-xl dark:prose-invert max-w-2xl mb-12 text-slate-700 dark:text-slate-300 leading-relaxed font-medium">
+                <ReactMarkdown
+                  components={{
+                    p: ({ children }) => <p className="mb-6">{children}</p>,
+                    strong: ({ children }) => <strong className="text-primary font-black uppercase tracking-wide">{children}</strong>,
+                  }}
+                >
+                  {profile?.shortBio || '...'}
+                </ReactMarkdown>
               </div>
 
               <div className="flex flex-wrap gap-4">
@@ -266,7 +273,7 @@ const Home = () => {
               >
                 <stat.icon className="w-8 h-8 text-primary mx-auto mb-4" />
                 <AnimatedCounter end={stat.value} suffix={stat.suffix} />
-                <p className="text-sm font-semibold text-slate-600 dark:text-slate-400 mt-2">{stat.label}</p>
+                <p className="text-base font-bold text-slate-900 dark:text-white mt-3 tracking-tight">{stat.label}</p>
               </motion.div>
             ))}
           </div>
@@ -297,14 +304,28 @@ const Home = () => {
               initial={{ opacity: 0, x: 50 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="bg-white/60 dark:bg-slate-800/60 backdrop-blur-xl rounded-3xl p-8 shadow-xl border border-slate-200/50 dark:border-slate-700/50"
+              className="bg-white/60 dark:bg-slate-800/60 backdrop-blur-xl rounded-3xl p-8 md:p-12 shadow-xl border border-slate-200/50 dark:border-slate-700/50 relative overflow-hidden"
             >
-              <div className="flex items-center gap-3 mb-6">
-                <Sparkles className="w-8 h-8 text-primary" />
-                <h2 className="text-4xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">About Me</h2>
+              <div className="absolute top-0 right-0 -mt-4 -mr-4 w-32 h-32 bg-primary/5 rounded-full blur-3xl" />
+              <div className="absolute bottom-0 left-0 -mb-4 -ml-4 w-32 h-32 bg-purple-500/5 rounded-full blur-3xl" />
+              
+              <div className="relative z-10">
+                <div className="flex items-center gap-3 mb-10">
+                <Sparkles className="w-10 h-10 text-primary animate-bounce" />
+                <h2 className="text-5xl md:text-6xl font-black tracking-tighter bg-gradient-to-r from-primary via-blue-600 to-purple-600 bg-clip-text text-transparent">About Me</h2>
               </div>
-              <div className="prose prose-lg dark:prose-invert max-w-none text-slate-600 dark:text-slate-400 mb-8">
-                <ReactMarkdown>{profile?.bio || profile?.shortBio}</ReactMarkdown>
+              <div className="prose prose-xl md:prose-2xl dark:prose-invert max-w-none mb-12">
+                <ReactMarkdown
+                  components={{
+                    p: ({ children }) => <p className="text-slate-700 dark:text-slate-300 leading-relaxed mb-8 text-xl font-medium">{children}</p>,
+                    strong: ({ children }) => <strong className="text-primary dark:text-primary font-black border-b-4 border-primary/20">{children}</strong>,
+                    em: ({ children }) => <em className="text-purple-600 dark:text-purple-400 italic not-italic font-bold bg-purple-500/10 px-2 rounded-md">{children}</em>,
+                    li: ({ children }) => <li className="text-slate-700 dark:text-slate-300 mb-4 text-xl font-medium list-none flex items-start gap-3"><span className="w-2 h-2 rounded-full bg-primary mt-3 shrink-0" />{children}</li>,
+                    a: ({ children, href }) => <a href={href} className="text-primary hover:text-blue-700 underline decoration-4 underline-offset-8 transition-all font-black" target="_blank" rel="noopener noreferrer">{children}</a>
+                  }}
+                >
+                  {profile?.bio || profile?.shortBio}
+                </ReactMarkdown>
               </div>
               
               <div className="flex flex-wrap gap-4 mb-8">
@@ -332,8 +353,9 @@ const Home = () => {
                   <Download size={20} /> Download Resume
                 </Link>
               )}
-            </motion.div>
-          </div>
+            </div>
+          </motion.div>
+        </div>
 
           {/* Experience & Education Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 mt-20">

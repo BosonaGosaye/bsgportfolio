@@ -47,10 +47,10 @@ const TimelineItem = ({ title, subtitle, duration, description, responsibilities
             <div className="flex-grow">
               <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 mb-2">
                 <div>
-                  <h3 className="text-xl font-bold text-slate-900 dark:text-white group-hover:text-primary transition-colors duration-300">
+                  <h3 className="text-xl md:text-2xl font-extrabold text-slate-900 dark:text-white group-hover:text-primary transition-colors duration-300 tracking-tight leading-tight mb-1">
                     {title}
                   </h3>
-                  <h4 className="text-primary font-semibold text-lg">
+                  <h4 className="text-primary font-bold text-lg tracking-wide uppercase text-sm">
                     {subtitle}
                   </h4>
                 </div>
@@ -65,8 +65,17 @@ const TimelineItem = ({ title, subtitle, duration, description, responsibilities
 
           {/* Description */}
           {description && (
-            <div className="prose prose-sm dark:prose-invert max-w-none text-slate-600 dark:text-slate-400 mt-4">
-              <ReactMarkdown>{description}</ReactMarkdown>
+            <div className="prose prose-sm md:prose-base dark:prose-invert max-w-none text-slate-600 dark:text-slate-400 mt-6 leading-relaxed">
+              <ReactMarkdown
+                components={{
+                  p: ({ children }) => <p className="mb-4 last:mb-0">{children}</p>,
+                  strong: ({ children }) => <strong className="text-slate-900 dark:text-white font-bold">{children}</strong>,
+                  em: ({ children }) => <em className="text-primary italic not-italic font-medium">{children}</em>,
+                  li: ({ children }) => <li className="mb-2">{children}</li>
+                }}
+              >
+                {description}
+              </ReactMarkdown>
             </div>
           )}
 

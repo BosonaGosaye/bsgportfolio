@@ -91,10 +91,12 @@ const ProjectDetail = () => {
 
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-12">
           <div>
-            <h1 className="text-4xl md:text-5xl font-extrabold mb-4">{project.title}</h1>
-            <div className="flex flex-wrap items-center gap-6 text-slate-600 dark:text-slate-400">
-              <span className="flex items-center"><Calendar size={18} className="mr-2" /> {new Date(project.createdAt).toLocaleDateString()}</span>
-              <span className="px-3 py-1 bg-primary/10 text-primary text-sm font-bold rounded-full">{project.category}</span>
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-black mb-8 tracking-tighter text-slate-900 dark:text-white leading-[1.05] drop-shadow-sm">
+              {project.title}
+            </h1>
+            <div className="flex flex-wrap items-center gap-6 text-slate-700 dark:text-slate-300 font-bold text-lg">
+              <span className="flex items-center"><Calendar size={22} className="mr-3 text-primary" /> {new Date(project.createdAt).toLocaleDateString()}</span>
+              <span className="px-6 py-2 bg-primary/10 text-primary text-base font-black rounded-full tracking-widest uppercase border-2 border-primary/20">{project.category}</span>
             </div>
           </div>
           <div className="flex gap-4">
@@ -158,10 +160,22 @@ const ProjectDetail = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
           <div className="lg:col-span-2">
-            <section className="mb-12">
-              <h2 className="text-2xl font-bold mb-6">Description</h2>
-              <div className="prose prose-lg dark:prose-invert max-w-none">
-                <ReactMarkdown>{project.longDescription || project.description}</ReactMarkdown>
+            <section className="mb-16">
+              <h2 className="text-4xl md:text-5xl font-black mb-10 tracking-tighter text-slate-900 dark:text-white bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+                Project Overview
+              </h2>
+              <div className="prose prose-xl dark:prose-invert max-w-none text-slate-700 dark:text-slate-300 leading-relaxed font-medium">
+                <ReactMarkdown
+                  components={{
+                    p: ({ children }) => <p className="mb-8 leading-relaxed text-xl">{children}</p>,
+                    strong: ({ children }) => <strong className="text-primary dark:text-primary font-black border-b-4 border-primary/20">{children}</strong>,
+                    em: ({ children }) => <em className="text-purple-600 dark:text-purple-400 font-bold bg-purple-500/10 px-2 rounded-md italic not-italic">{children}</em>,
+                    li: ({ children }) => <li className="mb-4 text-xl list-none flex items-start gap-3"><span className="w-2 h-2 rounded-full bg-primary mt-3 shrink-0" />{children}</li>,
+                    h3: ({ children }) => <h3 className="text-3xl font-black text-slate-900 dark:text-white mb-6 mt-12 tracking-tight">{children}</h3>
+                  }}
+                >
+                  {project.longDescription || project.description}
+                </ReactMarkdown>
               </div>
             </section>
 
