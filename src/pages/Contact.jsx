@@ -279,6 +279,7 @@ const Contact = () => {
                     <input
                       type="text"
                       id="name"
+                      name="name"
                       value={formData.name}
                       onChange={handleChange}
                       className={`w-full px-4 py-3 rounded-xl border ${errors.name ? 'border-red-500 focus:ring-red-500' : 'border-slate-200 dark:border-slate-700 focus:ring-primary'} bg-slate-50 dark:bg-slate-900/50 focus:outline-none focus:ring-2 transition-all`}
@@ -303,6 +304,7 @@ const Contact = () => {
                     <input
                       type="email"
                       id="email"
+                      name="email"
                       value={formData.email}
                       onChange={handleChange}
                       className={`w-full px-4 py-3 rounded-xl border ${errors.email ? 'border-red-500 focus:ring-red-500' : 'border-slate-200 dark:border-slate-700 focus:ring-primary'} bg-slate-50 dark:bg-slate-900/50 focus:outline-none focus:ring-2 transition-all`}
@@ -328,6 +330,7 @@ const Contact = () => {
                   <input
                     type="tel"
                     id="phone"
+                    name="phone"
                     value={formData.phone}
                     onChange={handleChange}
                     className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 focus:outline-none focus:ring-2 focus:ring-primary transition-all"
@@ -340,6 +343,7 @@ const Contact = () => {
                   <input
                     type="text"
                     id="subject"
+                    name="subject"
                     value={formData.subject}
                     onChange={handleChange}
                     className={`w-full px-4 py-3 rounded-xl border ${errors.subject ? 'border-red-500 focus:ring-red-500' : 'border-slate-200 dark:border-slate-700 focus:ring-primary'} bg-slate-50 dark:bg-slate-900/50 focus:outline-none focus:ring-2 transition-all`}
@@ -368,6 +372,7 @@ const Contact = () => {
                   </div>
                   <textarea
                     id="message"
+                    name="message"
                     rows="5"
                     value={formData.message}
                     onChange={handleChange}

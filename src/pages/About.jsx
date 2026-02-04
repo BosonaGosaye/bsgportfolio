@@ -131,6 +131,8 @@ const About = () => {
                     <img
                       src={profile?.aboutImage || profile?.profileImage}
                       alt={profile?.name}
+                      loading="eager"
+                      decoding="async"
                       className="relative w-full rounded-3xl shadow-2xl border-4 border-white dark:border-slate-800 z-10 aspect-[4/5] object-cover"
                     />
                     {/* Decorative Corner Elements */}

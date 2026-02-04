@@ -136,6 +136,9 @@ const Home = () => {
       <div className="flex flex-col items-center justify-center min-h-[60vh] text-center px-4">
         <h2 className="text-2xl font-bold text-red-500 mb-4">{error}</h2>
         <button
+          id="retry-button"
+          name="retry-button"
+          type="button"
           onClick={() => window.location.reload()}
           className="px-6 py-2 bg-primary text-white rounded-lg hover:bg-blue-700 transition-colors"
         >
@@ -190,11 +193,14 @@ const Home = () => {
                 <span className="text-sm font-semibold text-primary">Welcome to my portfolio</span>
               </motion.div>
 
-              <h1 className="text-5xl md:text-7xl lg:text-8xl font-black mb-8 leading-[1.05] tracking-tighter text-slate-900 dark:text-white">
-                Hi, I'm <span className="bg-gradient-to-r from-primary via-blue-600 to-purple-600 bg-clip-text text-transparent drop-shadow-sm">{profile?.name || '...'}</span>
+              <h1 className="text-3xl md:text-5xl lg:text-6xl font-black mb-6 leading-tight tracking-tight text-slate-900 dark:text-white">
+                Hi, I'm{" "}
+                 <span className="bg-gradient-to-r from-primary via-blue-600 to-purple-600 bg-clip-text text-transparent drop-shadow-sm">
+                   {profile?.name || '...'}
+                 </span>
               </h1>
 
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-slate-700 dark:text-slate-300 mb-10 min-h-[4rem] tracking-tight">
+              <h2 className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-slate-700 dark:text-slate-300 mb-10 min-h-[4rem] tracking-tight">
                 {!loading && <TypingAnimation texts={typingTexts} />}
               </h2>
 
@@ -261,6 +267,8 @@ const Home = () => {
                     whileHover={{ scale: 1.05, rotate: 2 }}
                     src={profile?.profileImage}
                     alt={profile?.name}
+                    loading="eager"
+                    decoding="async"
                     className="w-full h-full object-cover rounded-full border-4 border-white dark:border-slate-800 shadow-2xl relative z-10"
                   />
                 )}
@@ -311,6 +319,8 @@ const Home = () => {
                 <img
                   src={profile?.aboutImage || profile?.profileImage}
                   alt="About Me"
+                  loading="lazy"
+                  decoding="async"
                   className="relative w-full rounded-3xl shadow-2xl border-4 border-white dark:border-slate-800 z-10"
                 />
               </div>

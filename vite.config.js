@@ -15,6 +15,21 @@ export default defineConfig({
     }
   },
   build: {
-    sourcemap: true, // Enable source maps for debugging
+    sourcemap: false, // Disable sourcemaps in production for smaller builds
+    minify: 'terser', // Terser often produces smaller bundles than esbuild
+    terserOptions: {
+      compress: {
+        drop_console: true, // Remove console logs
+        drop_debugger: true,
+      }
+    },
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'vendor-react': ['react', 'react-dom', 'react-router-dom'],
+          'vendor-utils': ['axios', 'framer-motion', 'lucide-react'],
+        }
+      }
+    }
   }
 })

@@ -39,7 +39,10 @@ const Resume = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+        <div className="relative w-16 h-16">
+          <div className="absolute inset-0 rounded-full border-4 border-primary/20"></div>
+          <div className="absolute inset-0 rounded-full border-4 border-primary border-t-transparent animate-spin"></div>
+        </div>
       </div>
     );
   }
@@ -52,6 +55,9 @@ const Resume = () => {
         {/* Actions - Hidden on Print */}
         <div className="flex flex-wrap justify-end gap-4 mb-8 print:hidden">
           <button
+            id="print-button"
+            name="print-button"
+            type="button"
             onClick={handlePrint}
             className="flex items-center gap-2 px-6 py-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 rounded-xl font-bold hover:bg-slate-200 dark:hover:bg-slate-700 transition-all"
           >
@@ -82,6 +88,7 @@ const Resume = () => {
               src={getPdfUrl(profile.resumeUrl)}
               className="w-full h-[500px] md:h-[800px] border-none"
               title="Resume PDF"
+              loading="lazy"
             ></iframe>
             <div className="p-4 bg-slate-50 dark:bg-slate-800/50 text-center border-t border-slate-100 dark:border-slate-800">
               <a 

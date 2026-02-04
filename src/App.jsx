@@ -1,62 +1,76 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Home from './pages/Home';
-import About from './pages/About';
-import Projects from './pages/Projects';
-import ProjectDetail from './pages/ProjectDetail';
-import Blogs from './pages/Blogs';
-import BlogDetail from './pages/BlogDetail';
-import Contact from './pages/Contact';
-import Resume from './pages/Resume';
-import Services from './pages/Services';
-import Login from './pages/admin/Login';
-import Dashboard from './pages/admin/Dashboard';
-import ProjectsAdmin from './pages/admin/ProjectsAdmin';
-import BlogsAdmin from './pages/admin/BlogsAdmin';
-import SkillsAdmin from './pages/admin/SkillsAdmin';
-import ServicesAdmin from './pages/admin/ServicesAdmin';
-import ProfileAdmin from './pages/admin/ProfileAdmin';
-import MessagesAdmin from './pages/admin/MessagesAdmin';
-import AboutAdmin from './pages/admin/AboutAdmin';
+import { lazy, Suspense } from 'react';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ProtectedRoute from './components/ProtectedRoute';
-import AdminLayout from './components/AdminLayout';
 import { ThemeProvider } from './context/ThemeContext';
+
+// Lazy load pages for better performance
+const Home = lazy(() => import('./pages/Home'));
+const About = lazy(() => import('./pages/About'));
+const Projects = lazy(() => import('./pages/Projects'));
+const ProjectDetail = lazy(() => import('./pages/ProjectDetail'));
+const Blogs = lazy(() => import('./pages/Blogs'));
+const BlogDetail = lazy(() => import('./pages/BlogDetail'));
+const Contact = lazy(() => import('./pages/Contact'));
+const Resume = lazy(() => import('./pages/Resume'));
+const Services = lazy(() => import('./pages/Services'));
+const Login = lazy(() => import('./pages/admin/Login'));
+const Dashboard = lazy(() => import('./pages/admin/Dashboard'));
+const ProjectsAdmin = lazy(() => import('./pages/admin/ProjectsAdmin'));
+const BlogsAdmin = lazy(() => import('./pages/admin/BlogsAdmin'));
+const SkillsAdmin = lazy(() => import('./pages/admin/SkillsAdmin'));
+const ServicesAdmin = lazy(() => import('./pages/admin/ServicesAdmin'));
+const ProfileAdmin = lazy(() => import('./pages/admin/ProfileAdmin'));
+const MessagesAdmin = lazy(() => import('./pages/admin/MessagesAdmin'));
+const AboutAdmin = lazy(() => import('./pages/admin/AboutAdmin'));
+const AdminLayout = lazy(() => import('./components/AdminLayout'));
+
+const PageLoader = () => (
+  <div className="flex justify-center items-center min-h-[60vh]">
+    <div className="relative w-16 h-16">
+      <div className="absolute inset-0 rounded-full border-4 border-primary/20"></div>
+      <div className="absolute inset-0 rounded-full border-4 border-primary border-t-transparent animate-spin"></div>
+    </div>
+  </div>
+);
 
 function App() {
   return (
     <ThemeProvider>
       <Router>
         <div className="min-h-screen bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 flex flex-col">
-          <Routes>
-            {/* Public Routes with Navbar/Footer */}
-            <Route path="/" element={<><Navbar /><main className="flex-grow"><Home /></main><Footer /></>} />
-            <Route path="/about" element={<><Navbar /><main className="flex-grow"><About /></main><Footer /></>} />
-            <Route path="/projects" element={<><Navbar /><main className="flex-grow"><Projects /></main><Footer /></>} />
-            <Route path="/projects/:slug" element={<><Navbar /><main className="flex-grow"><ProjectDetail /></main><Footer /></>} />
-            <Route path="/blog" element={<><Navbar /><main className="flex-grow"><Blogs /></main><Footer /></>} />
-            <Route path="/blog/:slug" element={<><Navbar /><main className="flex-grow"><BlogDetail /></main><Footer /></>} />
-            <Route path="/services" element={<><Navbar /><main className="flex-grow"><Services /></main><Footer /></>} />
-            <Route path="/resume" element={<><Navbar /><main className="flex-grow"><Resume /></main><Footer /></>} />
-            <Route path="/contact" element={<><Navbar /><main className="flex-grow"><Contact /></main><Footer /></>} />
+          <Suspense fallback={<PageLoader />}>
+            <Routes>
+              {/* Public Routes with Navbar/Footer */}
+              <Route path="/" element={<><Navbar /><main className="flex-grow"><Home /></main><Footer /></>} />
+              <Route path="/about" element={<><Navbar /><main className="flex-grow"><About /></main><Footer /></>} />
+              <Route path="/projects" element={<><Navbar /><main className="flex-grow"><Projects /></main><Footer /></>} />
+              <Route path="/projects/:slug" element={<><Navbar /><main className="flex-grow"><ProjectDetail /></main><Footer /></>} />
+              <Route path="/blog" element={<><Navbar /><main className="flex-grow"><Blogs /></main><Footer /></>} />
+              <Route path="/blog/:slug" element={<><Navbar /><main className="flex-grow"><BlogDetail /></main><Footer /></>} />
+              <Route path="/services" element={<><Navbar /><main className="flex-grow"><Services /></main><Footer /></>} />
+              <Route path="/resume" element={<><Navbar /><main className="flex-grow"><Resume /></main><Footer /></>} />
+              <Route path="/contact" element={<><Navbar /><main className="flex-grow"><Contact /></main><Footer /></>} />
 
-            {/* Admin Routes */}
-            <Route path="/admin/login" element={<Login />} />
+              {/* Admin Routes */}
+              <Route path="/admin/login" element={<Login />} />
 
-            <Route element={<ProtectedRoute />}>
-              <Route path="/admin" element={<AdminLayout />}>
-                <Route index element={<Dashboard />} />
-                <Route path="dashboard" element={<Dashboard />} />
-                <Route path="projects" element={<ProjectsAdmin />} />
-                <Route path="blog" element={<BlogsAdmin />} />
-                <Route path="services" element={<ServicesAdmin />} />
-                <Route path="skills" element={<SkillsAdmin />} />
-                <Route path="profile" element={<ProfileAdmin />} />
-                <Route path="about" element={<AboutAdmin />} />
-                <Route path="messages" element={<MessagesAdmin />} />
+              <Route element={<ProtectedRoute />}>
+                <Route path="/admin" element={<AdminLayout />}>
+                  <Route index element={<Dashboard />} />
+                  <Route path="dashboard" element={<Dashboard />} />
+                  <Route path="projects" element={<ProjectsAdmin />} />
+                  <Route path="blog" element={<BlogsAdmin />} />
+                  <Route path="services" element={<ServicesAdmin />} />
+                  <Route path="skills" element={<SkillsAdmin />} />
+                  <Route path="profile" element={<ProfileAdmin />} />
+                  <Route path="about" element={<AboutAdmin />} />
+                  <Route path="messages" element={<MessagesAdmin />} />
+                </Route>
               </Route>
-            </Route>
-          </Routes>
+            </Routes>
+          </Suspense>
         </div>
       </Router>
     </ThemeProvider>

@@ -143,6 +143,8 @@ const Blogs = () => {
                 <img
                   src={featuredBlog.coverImage}
                   alt={featuredBlog.title}
+                  loading="eager"
+                  decoding="async"
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
