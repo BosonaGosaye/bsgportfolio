@@ -22,6 +22,7 @@ const seedProfile = async () => {
             bio: 'I am a passionate developer building amazing web applications.',
             shortBio: 'Building the future, one line of code at a time.',
             profileImage: 'https://via.placeholder.com/300',
+            aboutImage: 'https://via.placeholder.com/400x500',
             email: 'john@example.com',
             socialLinks: {
                 github: 'https://github.com',

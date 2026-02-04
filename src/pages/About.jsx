@@ -123,16 +123,15 @@ const About = () => {
                   {/* Animated Glow Ring */}
                   <div className="absolute -inset-4 bg-gradient-to-r from-primary via-purple-500 to-pink-500 rounded-3xl blur-2xl opacity-30 group-hover:opacity-50 transition-opacity duration-500 animate-pulse" />
 
-                  {/* Image Container */}
                   <motion.div
                     whileHover={{ scale: 1.02 }}
                     transition={{ type: 'spring', stiffness: 300, damping: 20 }}
                     className="relative"
                   >
                     <img
-                      src={profile?.profileImage}
+                      src={profile?.aboutImage || profile?.profileImage}
                       alt={profile?.name}
-                      className="relative w-full rounded-3xl shadow-2xl border-4 border-white dark:border-slate-800 z-10"
+                      className="relative w-full rounded-3xl shadow-2xl border-4 border-white dark:border-slate-800 z-10 aspect-[4/5] object-cover"
                     />
                     {/* Decorative Corner Elements */}
                     <div className="absolute -top-6 -right-6 w-24 h-24 bg-gradient-to-br from-primary to-purple-500 rounded-2xl opacity-20 blur-xl group-hover:scale-110 transition-transform duration-500" />

@@ -1,15 +1,17 @@
 import { useState, useEffect } from 'react';
 import { motion, useInView } from 'framer-motion';
-import { ArrowRight, Download, Mail, Code, Briefcase, Users, Award, Sparkles, TrendingUp } from 'lucide-react';
+import { ArrowRight, Download, Mail, Code, Briefcase, Users, Award, Sparkles, TrendingUp, Github, Linkedin, Twitter, Instagram } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
-import { getProfile, getProjects, getSkills, getBlogs, getServices } from '../services/api';
+import { getProfile, getProjects, getSkills, getBlogs, getServices, getEducation, getExperience } from '../services/api';
 import ProjectCard from '../components/ProjectCard';
 import BlogCard from '../components/BlogCard';
 import SkillBar from '../components/SkillBar';
 import ServiceCard from '../components/ServiceCard';
 import SkeletonLoader from '../components/SkeletonLoader';
 import Meta from '../components/Meta';
+import TimelineItem from '../components/TimelineItem';
+import SectionHeader from '../components/SectionHeader';
 import { useRef } from 'react';
 
 // Counter Animation Component
@@ -86,6 +88,8 @@ const TypingAnimation = ({ texts, speed = 100 }) => {
 
 const Home = () => {
   const [profile, setProfile] = useState(null);
+  const [education, setEducation] = useState([]);
+  const [experience, setExperience] = useState([]);
   const [projects, setProjects] = useState([]);
   const [skills, setSkills] = useState([]);
   const [blogs, setBlogs] = useState([]);
@@ -97,8 +101,10 @@ const Home = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const [profileRes, projectsRes, skillsRes, blogsRes, servicesRes] = await Promise.all([
+        const [profileRes, eduRes, expRes, projectsRes, skillsRes, blogsRes, servicesRes] = await Promise.all([
           getProfile(),
+          getEducation(),
+          getExperience(),
           getProjects(true),
           getSkills(),
           getBlogs({ limit: 3 }),
@@ -106,9 +112,11 @@ const Home = () => {
         ]);
 
         setProfile(profileRes.data);
-        setProjects(projectsRes.data);
-        setSkills(skillsRes.data);
-        setBlogs(blogsRes.data);
+        setEducation(eduRes.data?.data || eduRes.data || []);
+        setExperience(expRes.data?.data || expRes.data || []);
+        setProjects(projectsRes.data?.data || projectsRes.data || []);
+        setSkills(skillsRes.data?.data || skillsRes.data || []);
+        setBlogs(blogsRes.data?.data || blogsRes.data || []);
         const servicesData = servicesRes.data?.data || servicesRes.data || [];
         setServices(Array.isArray(servicesData) ? servicesData.filter(s => s.featured).slice(0, 3) : []);
       } catch (err) {
@@ -143,6 +151,13 @@ const Home = () => {
     'Tech Enthusiast'
   ];
 
+  const socialLinks = [
+    { icon: Github, url: profile?.socialLinks?.github, label: 'GitHub' },
+    { icon: Linkedin, url: profile?.socialLinks?.linkedin, label: 'LinkedIn' },
+    { icon: Twitter, url: profile?.socialLinks?.twitter, label: 'Twitter' },
+    { icon: Instagram, url: profile?.socialLinks?.instagram, label: 'Instagram' },
+  ];
+
   return (
     <>
       <Meta
@@ -151,19 +166,14 @@ const Home = () => {
         image={profile?.profileImage}
       />
 
-      {/* Hero Section with Enhanced Animations */}
+      {/* Hero Section */}
       <section className="relative min-h-[90vh] flex items-center pt-20 overflow-hidden">
-        {/* Animated Background */}
         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-purple-500/5 to-pink-500/5 animate-gradient-shift" />
-
-        {/* Floating Orbs */}
         <div className="absolute top-20 left-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl animate-blob" />
         <div className="absolute bottom-20 right-10 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-blob animation-delay-2000" />
-        <div className="absolute top-1/2 left-1/2 w-80 h-80 bg-pink-500/10 rounded-full blur-3xl animate-blob animation-delay-4000" />
-
+        
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            {/* Text Content */}
             <motion.div
               initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
@@ -212,7 +222,6 @@ const Home = () => {
               </div>
             </motion.div>
 
-            {/* Profile Image with Enhanced Effects */}
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -220,42 +229,25 @@ const Home = () => {
               className="relative"
             >
               <div className="w-64 h-64 md:w-96 md:h-96 mx-auto relative">
-                {/* Animated Glow Rings */}
                 <div className="absolute -inset-4 bg-gradient-to-r from-primary via-purple-500 to-pink-500 rounded-full blur-2xl opacity-30 animate-pulse" />
-                <div className="absolute -inset-8 bg-gradient-to-r from-pink-500 via-purple-500 to-primary rounded-full blur-3xl opacity-20 animate-blob" />
-
                 {loading ? (
                   <div className="w-full h-full bg-slate-200 dark:bg-slate-800 rounded-full animate-pulse relative z-10" />
                 ) : (
                   <motion.img
                     whileHover={{ scale: 1.05, rotate: 2 }}
-                    transition={{ type: 'spring', stiffness: 300, damping: 20 }}
                     src={profile?.profileImage}
                     alt={profile?.name}
                     className="w-full h-full object-cover rounded-full border-4 border-white dark:border-slate-800 shadow-2xl relative z-10"
                   />
                 )}
-
-                {/* Decorative Elements */}
-                <motion.div
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
-                  className="absolute -top-6 -right-6 w-24 h-24 bg-gradient-to-br from-primary to-purple-500 rounded-2xl opacity-20 blur-xl"
-                />
-                <motion.div
-                  animate={{ rotate: -360 }}
-                  transition={{ duration: 15, repeat: Infinity, ease: 'linear' }}
-                  className="absolute -bottom-6 -left-6 w-32 h-32 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl opacity-20 blur-xl"
-                />
               </div>
             </motion.div>
           </div>
         </div>
       </section>
 
-      {/* Stats Counter Section - NEW */}
-      <section className="py-20 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-purple-500/5" />
+      {/* Stats Section */}
+      <section className="py-12 relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {[
@@ -269,77 +261,148 @@ const Home = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                whileHover={{ y: -8, scale: 1.05 }}
-                className="relative bg-white/60 dark:bg-slate-800/60 backdrop-blur-xl p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-slate-200/50 dark:border-slate-700/50 text-center group"
+                className="bg-white/60 dark:bg-slate-800/60 backdrop-blur-xl p-6 rounded-2xl shadow-lg border border-slate-200/50 dark:border-slate-700/50 text-center"
               >
-                {/* Gradient Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl" />
-
-                <div className="relative z-10">
-                  <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-primary/10 to-purple-500/10 rounded-2xl mb-4 group-hover:scale-110 transition-transform duration-300">
-                    <stat.icon className="w-8 h-8 text-primary" />
-                  </div>
-                  <AnimatedCounter end={stat.value} suffix={stat.suffix} />
-                  <p className="text-sm font-semibold text-slate-600 dark:text-slate-400 mt-2">
-                    {stat.label}
-                  </p>
-                </div>
-
-                {/* Decorative Element */}
-                <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-gradient-to-br from-primary/10 to-purple-500/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500" />
+                <stat.icon className="w-8 h-8 text-primary mx-auto mb-4" />
+                <AnimatedCounter end={stat.value} suffix={stat.suffix} />
+                <p className="text-sm font-semibold text-slate-600 dark:text-slate-400 mt-2">{stat.label}</p>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* About Preview with Glassmorphism */}
-      <section className="py-20 relative overflow-hidden">
-        <div className="absolute inset-0 bg-slate-100 dark:bg-slate-800/50" />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="max-w-3xl mx-auto text-center bg-white/60 dark:bg-slate-800/60 backdrop-blur-xl p-12 rounded-3xl shadow-xl border border-slate-200/50 dark:border-slate-700/50"
-          >
-            <TrendingUp className="w-12 h-12 text-primary mx-auto mb-6" />
-            <h2 className="text-3xl font-bold mb-8 bg-gradient-to-r from-primary via-purple-600 to-pink-600 bg-clip-text text-transparent">About Me</h2>
-            <p className="text-lg text-slate-600 dark:text-slate-400 mb-8 italic leading-relaxed">
-              "{profile?.shortBio || '...'}"
-            </p>
-            <Link
-              to="/about"
-              className="inline-flex items-center text-primary font-bold hover:underline group"
+      {/* About Section */}
+      <section className="py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              className="relative"
             >
-              Read Full Story <ArrowRight className="ml-2 group-hover:translate-x-2 transition-transform" size={20} />
-            </Link>
-          </motion.div>
+              <div className="relative w-full max-w-md mx-auto">
+                <div className="absolute -inset-4 bg-gradient-to-r from-primary to-purple-500 rounded-3xl blur-2xl opacity-20" />
+                {loading ? (
+                  <div className="w-full aspect-[4/5] bg-slate-200 dark:bg-slate-800 rounded-3xl animate-pulse relative z-10" />
+                ) : (
+                  <img
+                    src={profile?.aboutImage || profile?.profileImage}
+                    alt="About Me"
+                    className="relative w-full rounded-3xl shadow-2xl border-4 border-white dark:border-slate-800 z-10 object-cover aspect-[4/5]"
+                  />
+                )}
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="bg-white/60 dark:bg-slate-800/60 backdrop-blur-xl rounded-3xl p-8 shadow-xl border border-slate-200/50 dark:border-slate-700/50"
+            >
+              <div className="flex items-center gap-3 mb-6">
+                <Sparkles className="w-8 h-8 text-primary" />
+                <h2 className="text-4xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">About Me</h2>
+              </div>
+              <div className="prose prose-lg dark:prose-invert max-w-none text-slate-600 dark:text-slate-400 mb-8">
+                <ReactMarkdown>{profile?.bio || profile?.shortBio}</ReactMarkdown>
+              </div>
+              
+              <div className="flex flex-wrap gap-4 mb-8">
+                {socialLinks.map(({ icon: Icon, url, label }) => url && (
+                  <motion.a
+                    key={label}
+                    href={url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    whileHover={{ scale: 1.1, y: -2 }}
+                    className="p-3 bg-slate-100 dark:bg-slate-700/50 rounded-xl text-slate-600 dark:text-slate-400 hover:text-primary transition-all"
+                    aria-label={label}
+                  >
+                    <Icon size={24} />
+                  </motion.a>
+                ))}
+              </div>
+
+              {profile?.resumeUrl && (
+                <Link
+                  to={profile.resumeUrl}
+                  target="_blank"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-primary to-purple-600 text-white font-bold rounded-xl shadow-lg"
+                >
+                  <Download size={20} /> Download Resume
+                </Link>
+              )}
+            </motion.div>
+          </div>
+
+          {/* Experience & Education Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 mt-20">
+            <section>
+              <SectionHeader title="Experience" />
+              <div className="mt-8 space-y-6">
+                {loading ? (
+                  [...Array(2)].map((_, i) => <SkeletonLoader key={i} />)
+                ) : Array.isArray(experience) && experience.length > 0 ? (
+                  experience.map((exp, index) => (
+                    <TimelineItem
+                      key={exp._id}
+                      title={exp.position}
+                      subtitle={exp.company}
+                      duration={`${new Date(exp.startDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })} - ${exp.current ? 'Present' : new Date(exp.endDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}`}
+                      description={exp.description}
+                      type="experience"
+                    />
+                  ))
+                ) : (
+                  <p className="text-slate-500">No experience records found.</p>
+                )}
+              </div>
+            </section>
+            <section>
+              <SectionHeader title="Education" />
+              <div className="mt-8 space-y-6">
+                {loading ? (
+                  [...Array(2)].map((_, i) => <SkeletonLoader key={i} />)
+                ) : Array.isArray(education) && education.length > 0 ? (
+                  education.map((edu, index) => (
+                    <TimelineItem
+                      key={edu._id}
+                      title={edu.degree}
+                      subtitle={edu.institution}
+                      duration={`${new Date(edu.startDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })} - ${edu.current ? 'Present' : new Date(edu.endDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}`}
+                      description={edu.description}
+                      type="education"
+                    />
+                  ))
+                ) : (
+                  <p className="text-slate-500">No education records found.</p>
+                )}
+              </div>
+            </section>
+          </div>
         </div>
       </section>
 
-      {/* Featured Projects */}
-      <section className="py-20">
+      {/* Featured Projects Section */}
+      <section className="py-20 bg-slate-50/50 dark:bg-slate-900/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="flex justify-between items-end mb-12"
-          >
+          <div className="flex justify-between items-end mb-12">
             <div>
               <h2 className="text-3xl font-bold mb-4 bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">Featured Projects</h2>
               <p className="text-slate-600 dark:text-slate-400">Some of my recent work that I'm proud of.</p>
             </div>
             <Link to="/projects" className="hidden md:flex items-center text-primary font-bold hover:underline group">
-              View All Projects <ArrowRight size={20} className="ml-2 group-hover:translate-x-2 transition-transform" />
+              View All <ArrowRight size={20} className="ml-2 group-hover:translate-x-2 transition-transform" />
             </Link>
-          </motion.div>
+          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {loading ? (
               [...Array(3)].map((_, i) => <SkeletonLoader key={i} />)
-            ) : projects.length > 0 ? (
+            ) : Array.isArray(projects) && projects.length > 0 ? (
               projects.map((project, index) => (
                 <motion.div
                   key={project._id}
@@ -358,28 +421,14 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Services Preview */}
-      <section className="py-20">
+      {/* Services Section */}
+      <section className="py-20 bg-slate-50/50 dark:bg-slate-900/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="flex justify-between items-end mb-12"
-          >
-            <div>
-              <h2 className="text-3xl font-bold mb-4 bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">Services I Offer</h2>
-              <p className="text-slate-600 dark:text-slate-400">Professional solutions tailored to your needs.</p>
-            </div>
-            <Link to="/services" className="hidden md:flex items-center text-primary font-bold hover:underline group">
-              View All Services <ArrowRight size={20} className="ml-2 group-hover:translate-x-2 transition-transform" />
-            </Link>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <SectionHeader title="Services I Offer" subtitle="Professional solutions tailored to your needs." />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
             {loading ? (
               [...Array(3)].map((_, i) => <SkeletonLoader key={i} />)
-            ) : services.length > 0 ? (
+            ) : Array.isArray(services) && services.length > 0 ? (
               services.map((service, index) => (
                 <ServiceCard key={service._id} service={service} index={index} />
               ))
@@ -387,48 +436,20 @@ const Home = () => {
               <p className="col-span-full text-center text-slate-500">No services available yet.</p>
             )}
           </div>
-
-          <div className="text-center mt-12 md:hidden">
-            <Link
-              to="/services"
-              className="inline-flex items-center text-primary font-bold hover:underline group"
-            >
-              View All Services <ArrowRight size={20} className="ml-2 group-hover:translate-x-2 transition-transform" />
-            </Link>
-          </div>
         </div>
       </section>
 
-      {/* Skills Summary */}
-      <section className="py-20 bg-slate-100 dark:bg-slate-800/50">
+      {/* Skills Section */}
+      <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-3xl font-bold mb-4 bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">Core Skills</h2>
-            <p className="text-slate-600 dark:text-slate-400">My technical expertise and toolset.</p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
+          <SectionHeader title="Core Skills" subtitle="My technical expertise and toolset." />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8 mt-12">
             {loading ? (
               [...Array(6)].map((_, i) => <SkeletonLoader key={i} type="bar" />)
-            ) : skills.length > 0 ? (
-              skills
-                .filter(skill => skill.category === 'Tools & Technologies')
-                .map((skill, index) => (
-                  <motion.div
-                    key={skill._id}
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: index * 0.1 }}
-                  >
-                    <SkillBar skill={skill} />
-                  </motion.div>
-                ))
+            ) : Array.isArray(skills) && skills.length > 0 ? (
+              skills.map((skill, index) => (
+                <SkillBar key={skill._id} skill={skill} />
+              ))
             ) : (
               <p className="col-span-full text-center text-slate-500">No skills added yet.</p>
             )}
@@ -436,28 +457,19 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Latest Blog Posts */}
-      <section className="py-20">
+      {/* Blog Section */}
+      <section className="py-20 bg-slate-50/50 dark:bg-slate-900/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="flex justify-between items-end mb-12"
-          >
-            <div>
-              <h2 className="text-3xl font-bold mb-4 bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">Latest from the Blog</h2>
-              <p className="text-slate-600 dark:text-slate-400">Insights, tutorials, and thoughts on development.</p>
-            </div>
+          <div className="flex justify-between items-end mb-12">
+            <SectionHeader title="Latest from the Blog" subtitle="Insights, tutorials, and thoughts on development." />
             <Link to="/blog" className="hidden md:flex items-center text-primary font-bold hover:underline group">
-              View All Posts <ArrowRight size={20} className="ml-2 group-hover:translate-x-2 transition-transform" />
+              View All <ArrowRight size={20} className="ml-2 group-hover:translate-x-2 transition-transform" />
             </Link>
-          </motion.div>
-
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {loading ? (
               [...Array(3)].map((_, i) => <SkeletonLoader key={i} type="blog" />)
-            ) : blogs.length > 0 ? (
+            ) : Array.isArray(blogs) && blogs.length > 0 ? (
               blogs.map((blog, index) => (
                 <motion.div
                   key={blog._id}
@@ -476,33 +488,21 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Contact CTA with Enhanced Design */}
+      {/* Contact CTA */}
       <section className="py-20 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-primary via-blue-600 to-purple-600" />
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS1vcGFjaXR5PSIwLjEiIHN0cm9rZS13aWR0aD0iMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] opacity-20" />
-
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+          <Sparkles className="w-16 h-16 text-white mx-auto mb-6 animate-pulse" />
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">Let's work together on your next project</h2>
+          <p className="text-blue-100 text-lg mb-10 max-w-2xl mx-auto">
+            I'm currently available for freelance work and full-time opportunities.
+          </p>
+          <Link
+            to="/contact"
+            className="inline-flex items-center px-10 py-4 bg-white text-primary rounded-xl font-bold text-lg hover:bg-blue-50 transition-all shadow-2xl"
           >
-            <Sparkles className="w-16 h-16 text-white mx-auto mb-6 animate-pulse" />
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
-              Let's work together on your next project
-            </h2>
-            <p className="text-blue-100 text-lg mb-10 max-w-2xl mx-auto">
-              I'm currently available for freelance work and full-time opportunities.
-              Feel free to reach out for a consultation or just to say hi!
-            </p>
-            <Link
-              to="/contact"
-              className="inline-flex items-center px-10 py-4 bg-white text-primary rounded-xl font-bold text-lg hover:bg-blue-50 hover:scale-105 transition-all shadow-2xl group"
-            >
-              Get In Touch
-              <Mail className="ml-2 group-hover:translate-x-1 transition-transform" size={24} />
-            </Link>
-          </motion.div>
+            Get In Touch <Mail className="ml-2" size={24} />
+          </Link>
         </div>
       </section>
     </>

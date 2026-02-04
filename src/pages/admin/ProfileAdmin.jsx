@@ -41,6 +41,7 @@ const ProfileAdmin = () => {
         bio: '',
         shortBio: '',
         profileImage: '',
+        aboutImage: '',
         resumeUrl: '',
         socialLinks: {
             github: '',
@@ -68,6 +69,7 @@ const ProfileAdmin = () => {
                     bio: res.data.bio || '',
                     shortBio: res.data.shortBio || '',
                     profileImage: res.data.profileImage || '',
+                    aboutImage: res.data.aboutImage || '',
                     resumeUrl: res.data.resumeUrl || '',
                     socialLinks: {
                         github: res.data.socialLinks?.github || '',
@@ -101,7 +103,7 @@ const ProfileAdmin = () => {
         }
     };
 
-    const handleImageUpload = async (e) => {
+    const handleImageUpload = async (e, field = 'profileImage') => {
         const file = e.target.files[0];
         if (!file) return;
 
@@ -111,7 +113,7 @@ const ProfileAdmin = () => {
         try {
             setUploading(true);
             const res = await uploadFile(formDataUpload, user.token);
-            setFormData(prev => ({ ...prev, profileImage: res.data.url }));
+            setFormData(prev => ({ ...prev, [field]: res.data.url }));
         } catch (err) {
             console.error('Error uploading image:', err);
             setMessage({ type: 'error', text: 'Failed to upload image' });
@@ -240,36 +242,64 @@ const ProfileAdmin = () => {
 
             <form onSubmit={handleSubmit} className="bg-white dark:bg-slate-800 rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-100 dark:border-slate-700 space-y-8">
 
-                {/* Profile Image */}
-                <div className="flex flex-col sm:flex-row items-center gap-6">
-                    <div className="relative group">
-                        <div className="w-32 h-32 rounded-full overflow-hidden bg-slate-100 dark:bg-slate-700 border-4 border-white dark:border-slate-800 shadow-lg">
-                            {formData.profileImage ? (
-                                <img src={formData.profileImage} alt="Profile" className="w-full h-full object-cover" />
-                            ) : (
-                                <div className="h-full w-full flex items-center justify-center text-slate-400">
-                                    <User size={48} />
-                                </div>
-                            )}
-                            {uploading && (
-                                <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-                                    <Loader className="animate-spin text-white" size={24} />
-                                </div>
-                            )}
+                {/* Profile & About Images */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="flex flex-col items-center gap-4 p-6 bg-slate-50 dark:bg-slate-900/50 rounded-3xl border border-slate-100 dark:border-slate-800">
+                        <label className="text-sm font-bold text-slate-500 uppercase tracking-wider">Profile Photo</label>
+                        <div className="relative group">
+                            <div className="w-32 h-32 rounded-full overflow-hidden bg-slate-100 dark:bg-slate-700 border-4 border-white dark:border-slate-800 shadow-lg">
+                                {formData.profileImage ? (
+                                    <img src={formData.profileImage} alt="Profile" className="w-full h-full object-cover" />
+                                ) : (
+                                    <div className="h-full w-full flex items-center justify-center text-slate-400">
+                                        <User size={48} />
+                                    </div>
+                                )}
+                                {uploading && (
+                                    <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                                        <Loader className="animate-spin text-white" size={24} />
+                                    </div>
+                                )}
+                            </div>
+                            <label className="absolute bottom-0 right-0 p-2 bg-primary text-white rounded-full cursor-pointer hover:bg-blue-600 transition-colors shadow-lg">
+                                <ImageIcon size={16} />
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={(e) => handleImageUpload(e, 'profileImage')}
+                                    className="hidden"
+                                />
+                            </label>
                         </div>
-                        <label className="absolute bottom-0 right-0 p-2 bg-primary text-white rounded-full cursor-pointer hover:bg-blue-600 transition-colors shadow-lg">
-                            <ImageIcon size={16} />
-                            <input
-                                type="file"
-                                accept="image/*"
-                                onChange={handleImageUpload}
-                                className="hidden"
-                            />
-                        </label>
                     </div>
-                    <div className="text-center sm:text-left">
-                        <h2 className="text-xl font-bold">{formData.name || 'Your Name'}</h2>
-                        <p className="text-slate-500 dark:text-slate-400">{formData.title || 'Your Title'}</p>
+
+                    <div className="flex flex-col items-center gap-4 p-6 bg-slate-50 dark:bg-slate-900/50 rounded-3xl border border-slate-100 dark:border-slate-800">
+                        <label className="text-sm font-bold text-slate-500 uppercase tracking-wider">About Section Photo</label>
+                        <div className="relative group">
+                            <div className="w-40 h-32 rounded-2xl overflow-hidden bg-slate-100 dark:bg-slate-700 border-4 border-white dark:border-slate-800 shadow-lg">
+                                {formData.aboutImage ? (
+                                    <img src={formData.aboutImage} alt="About" className="w-full h-full object-cover" />
+                                ) : (
+                                    <div className="h-full w-full flex items-center justify-center text-slate-400">
+                                        <ImageIcon size={48} />
+                                    </div>
+                                )}
+                                {uploading && (
+                                    <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                                        <Loader className="animate-spin text-white" size={24} />
+                                    </div>
+                                )}
+                            </div>
+                            <label className="absolute bottom-0 right-0 p-2 bg-primary text-white rounded-full cursor-pointer hover:bg-blue-600 transition-colors shadow-lg">
+                                <ImageIcon size={16} />
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={(e) => handleImageUpload(e, 'aboutImage')}
+                                    className="hidden"
+                                />
+                            </label>
+                        </div>
                     </div>
                 </div>
 
