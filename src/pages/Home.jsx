@@ -241,15 +241,12 @@ const Home = () => {
                   Contact Me <Mail className="ml-2 group-hover:translate-x-1 transition-transform" size={20} />
                 </Link>
                 {profile?.resumeUrl && (
-                  <a
-                    href={profile.resumeUrl}
-                    download
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <Link
+                    to="/resume"
                     className="group px-8 py-3 bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl border-2 border-slate-300 dark:border-slate-600 rounded-xl font-bold flex items-center hover:border-primary hover:bg-primary/5 hover:scale-105 transition-all duration-300 shadow-lg"
                   >
-                    Download Resume <Download className="ml-2 group-hover:translate-y-0.5 transition-transform" size={20} />
-                  </a>
+                    View Resume <Download className="ml-2 group-hover:translate-y-0.5 transition-transform" size={20} />
+                  </Link>
                 )}
               </div>
             </motion.div>
@@ -374,11 +371,11 @@ const Home = () => {
 
               {profile?.resumeUrl && (
                 <Link
-                  to={profile.resumeUrl}
-                  target="_blank"
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-primary to-purple-600 text-white font-bold rounded-xl shadow-lg"
-                >
-                  <Download size={20} /> Download Resume
+                      to="/resume"
+                      className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-primary to-purple-600 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+                    >
+                      <Download size={20} />
+                      View Resume
                 </Link>
               )}
             </div>

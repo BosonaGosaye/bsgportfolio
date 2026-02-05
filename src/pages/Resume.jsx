@@ -54,16 +54,7 @@ const Resume = () => {
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Actions - Hidden on Print */}
         <div className="flex flex-wrap justify-end gap-4 mb-8 print:hidden">
-          <button
-            id="print-button"
-            name="print-button"
-            type="button"
-            onClick={handlePrint}
-            className="flex items-center gap-2 px-6 py-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 rounded-xl font-bold hover:bg-slate-200 dark:hover:bg-slate-700 transition-all"
-          >
-            <Printer size={20} />
-            Print
-          </button>
+          
           {profile?.resumeUrl && (
             <a
               href={profile.resumeUrl}

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { Github, Linkedin, Twitter, Instagram, Mail, Download, Sparkles } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { getProfile, getEducation, getExperience, getSkills, getCertifications } from '../services/api';
@@ -203,17 +204,13 @@ const About = () => {
 
                   {/* Download Resume Button */}
                   {profile?.resumeUrl && (
-                    <motion.a
-                      href={profile.resumeUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
+                    <Link
+                      to="/resume"
                       className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-primary to-purple-600 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
                     >
                       <Download size={20} />
-                      Download Resume
-                    </motion.a>
+                      View Resume
+                    </Link>
                   )}
                 </div>
               </motion.div>
