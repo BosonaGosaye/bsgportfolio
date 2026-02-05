@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import {
+    Plus,
+    Trash2,
     Save,
     Loader,
     User,
@@ -35,6 +37,7 @@ const ProfileAdmin = () => {
     const [formData, setFormData] = useState({
         name: '',
         title: '',
+        titles: [],
         email: '',
         phone: '',
         location: '',
@@ -63,6 +66,7 @@ const ProfileAdmin = () => {
                 setFormData({
                     name: res.data.name || '',
                     title: res.data.title || '',
+                    titles: Array.isArray(res.data.titles) ? res.data.titles : (res.data.title ? [res.data.title] : []),
                     email: res.data.email || '',
                     phone: res.data.phone || '',
                     location: res.data.location || '',
@@ -85,6 +89,21 @@ const ProfileAdmin = () => {
         } finally {
             setLoading(false);
         }
+    };
+
+    const handleTitleChange = (index, value) => {
+        const newTitles = [...formData.titles];
+        newTitles[index] = value;
+        setFormData(prev => ({ ...prev, titles: newTitles }));
+    };
+
+    const addTitle = () => {
+        setFormData(prev => ({ ...prev, titles: [...prev.titles, ''] }));
+    };
+
+    const removeTitle = (index) => {
+        const newTitles = formData.titles.filter((_, i) => i !== index);
+        setFormData(prev => ({ ...prev, titles: newTitles }));
     };
 
     const handleInputChange = (e) => {
@@ -204,8 +223,14 @@ const ProfileAdmin = () => {
         setSaving(true);
         setMessage({ type: '', text: '' });
 
+        // Ensure title is set to the first professional title for compatibility
+        const updatedFormData = {
+            ...formData,
+            title: formData.titles.length > 0 ? formData.titles[0] : formData.title
+        };
+
         try {
-            await updateProfile(formData, user.token);
+            await updateProfile(updatedFormData, user.token);
             setMessage({ type: 'success', text: 'Profile updated successfully!' });
 
             // Clear success message after 3 seconds
@@ -323,18 +348,52 @@ const ProfileAdmin = () => {
                         </div>
 
                         <div>
-                            <label className="block text-sm font-bold mb-2 flex items-center gap-2">
-                                <Briefcase size={16} className="text-slate-400" />
-                                Professional Title
-                            </label>
-                            <input
-                                type="text"
-                                name="title"
-                                value={formData.title}
-                                onChange={handleInputChange}
-                                required
-                                className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 focus:ring-2 focus:ring-primary outline-none transition-all"
-                            />
+                            <div className="flex items-center justify-between mb-2">
+                                <label className="text-sm font-bold flex items-center gap-2">
+                                    <Briefcase size={16} className="text-slate-400" />
+                                    Professional Titles
+                                </label>
+                                <button
+                                    type="button"
+                                    onClick={addTitle}
+                                    className="p-1.5 bg-primary/10 text-primary rounded-lg hover:bg-primary/20 transition-colors"
+                                    title="Add Title"
+                                >
+                                    <Plus size={16} />
+                                </button>
+                            </div>
+                            <div className="space-y-3">
+                                {formData.titles.map((title, index) => (
+                                    <div key={index} className="flex gap-2">
+                                        <input
+                                            type="text"
+                                            value={title}
+                                            onChange={(e) => handleTitleChange(index, e.target.value)}
+                                            required
+                                            className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 focus:ring-2 focus:ring-primary outline-none transition-all"
+                                            placeholder={`e.g. Full Stack Developer`}
+                                        />
+                                        {formData.titles.length > 1 && (
+                                            <button
+                                                type="button"
+                                                onClick={() => removeTitle(index)}
+                                                className="p-2.5 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl transition-colors"
+                                            >
+                                                <Trash2 size={18} />
+                                            </button>
+                                        )}
+                                    </div>
+                                ))}
+                                {formData.titles.length === 0 && (
+                                    <button
+                                        type="button"
+                                        onClick={addTitle}
+                                        className="w-full py-3 border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-xl text-slate-400 hover:text-primary hover:border-primary transition-all text-sm font-medium"
+                                    >
+                                        + Add Professional Title
+                                    </button>
+                                )}
+                            </div>
                         </div>
 
                         <div>

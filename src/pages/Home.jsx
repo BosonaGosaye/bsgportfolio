@@ -148,12 +148,14 @@ const Home = () => {
     );
   }
 
-  const typingTexts = [
-    profile?.title || 'Full Stack Developer',
-    'Problem Solver',
-    'Creative Thinker',
-    'Tech Enthusiast'
-  ];
+  const typingTexts = profile?.titles?.length > 0 
+    ? profile.titles 
+    : [
+        profile?.title || 'Full Stack Developer',
+        'Problem Solver',
+        'Creative Thinker',
+        'Tech Enthusiast'
+      ];
 
   const socialLinks = [
     { icon: Github, url: profile?.socialLinks?.github, label: 'GitHub' },

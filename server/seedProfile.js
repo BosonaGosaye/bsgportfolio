@@ -19,6 +19,7 @@ const seedProfile = async () => {
         await Profile.create({
             name: 'John Doe',
             title: 'Full Stack Developer',
+            titles: ['Full Stack Developer', 'Problem Solver', 'Creative Thinker'],
             bio: 'I am a passionate developer building amazing web applications.',
             shortBio: 'Building the future, one line of code at a time.',
             profileImage: 'https://via.placeholder.com/300',

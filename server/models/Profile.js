@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const profileSchema = new mongoose.Schema({
   name: { type: String, required: true },
   title: { type: String, required: true },
+  titles: [{ type: String }],
   bio: { type: String, required: true },
   shortBio: { type: String, required: true },
   profileImage: { type: String, required: true },
