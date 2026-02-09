@@ -3,6 +3,8 @@ import { lazy, Suspense } from 'react';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ProtectedRoute from './components/ProtectedRoute';
+import AnimatedBackground from './components/AnimatedBackground';
+import ScrollProgress from './components/ScrollProgress';
 import { ThemeProvider } from './context/ThemeContext';
 
 // Lazy load pages for better performance
@@ -39,7 +41,9 @@ function App() {
   return (
     <ThemeProvider>
       <Router>
-        <div className="min-h-screen bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 flex flex-col">
+        <div className="relative min-h-screen text-slate-900 dark:text-slate-100 flex flex-col">
+          <AnimatedBackground />
+          <ScrollProgress />
           <Suspense fallback={<PageLoader />}>
             <Routes>
               {/* Public Routes with Navbar/Footer */}

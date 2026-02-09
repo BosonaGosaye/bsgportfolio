@@ -11,7 +11,7 @@ const BlogCard = ({ blog, readingTime }) => {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       whileHover={{ y: -6, transition: { duration: 0.3 } }}
-      className="bg-white dark:bg-slate-800 rounded-2xl overflow-hidden shadow-md hover:shadow-xl hover:shadow-primary/10 transition-all duration-300 border border-slate-200 dark:border-slate-700 hover:border-primary/50 flex flex-col h-full group relative"
+      className="glass-card rounded-2xl overflow-hidden flex flex-col h-full group relative"
     >
       {/* Subtle gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-br from-primary/3 via-transparent to-purple-500/3 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-2xl" />

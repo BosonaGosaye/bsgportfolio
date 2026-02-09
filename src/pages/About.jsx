@@ -1,7 +1,9 @@
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { useState, useEffect, useRef } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
+
 import { Link } from 'react-router-dom';
-import { Github, Linkedin, Twitter, Instagram, Mail, Download, Sparkles } from 'lucide-react';
+import { Github, Linkedin, Twitter, Instagram, Mail, Download, Sparkles, TrendingUp, Users, Code } from 'lucide-react';
+
 import ReactMarkdown from 'react-markdown';
 import { getProfile, getEducation, getExperience, getSkills, getCertifications } from '../services/api';
 import TimelineItem from '../components/TimelineItem';
@@ -20,7 +22,17 @@ const About = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const heroRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ["start end", "end start"]
+  });
+
+  const imgY = useTransform(scrollYProgress, [0, 1], [-50, 50]);
+  const imgRotate = useTransform(scrollYProgress, [0, 1], [-2, 2]);
+
   useEffect(() => {
+
     const fetchData = async () => {
       try {
         setLoading(true);
@@ -99,6 +111,8 @@ const About = () => {
 
   return (
     <>
+
+
       <Meta
         title="About Me"
         description={profile?.bio?.substring(0, 160)}
@@ -106,42 +120,47 @@ const About = () => {
       />
 
       <div className="relative overflow-hidden">
-        {/* Animated Background Gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-purple-500/5 to-pink-500/5 animate-gradient-shift pointer-events-none" />
+        {/* Background blobs */}
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[120px] -z-10" />
+        <div className="absolute bottom-1/4 left-0 w-[600px] h-[600px] bg-purple-500/5 rounded-full blur-[120px] -z-10" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 relative z-10">
           {/* Profile Overview - Hero Section */}
-          <section className="mb-32">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <section ref={heroRef} className="mb-40">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
               {/* Profile Image */}
               <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
+                initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.8, ease: 'easeOut' }}
-                className="relative group"
+                transition={{ duration: 0.8 }}
+                className="relative"
               >
-                <div className="relative w-full max-w-md mx-auto">
-                  {/* Animated Glow Ring */}
-                  <div className="absolute -inset-4 bg-gradient-to-r from-primary via-purple-500 to-pink-500 rounded-3xl blur-2xl opacity-30 group-hover:opacity-50 transition-opacity duration-500 animate-pulse" />
+                <div className="relative w-full max-w-lg mx-auto">
+                  <div className="absolute -inset-10 bg-gradient-to-r from-primary/30 to-purple-500/30 rounded-full blur-[100px] opacity-20 animate-pulse" />
 
                   <motion.div
-                    whileHover={{ scale: 1.02 }}
-                    transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-                    className="relative"
+                    style={{ y: imgY, rotate: imgRotate }}
+                    className="relative z-10"
                   >
                     <img
                       src={profile?.aboutImage || profile?.profileImage}
                       alt={profile?.name}
                       loading="eager"
-                      decoding="async"
-                      className="relative w-full rounded-3xl shadow-2xl border-4 border-white dark:border-slate-800 z-10 aspect-[4/5] object-cover"
+                      className="w-full rounded-[3rem] shadow-2xl border-4 border-white/20 aspect-[4/5] object-cover"
                     />
-                    {/* Decorative Corner Elements */}
-                    <div className="absolute -top-6 -right-6 w-24 h-24 bg-gradient-to-br from-primary to-purple-500 rounded-2xl opacity-20 blur-xl group-hover:scale-110 transition-transform duration-500" />
-                    <div className="absolute -bottom-6 -left-6 w-32 h-32 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl opacity-20 blur-xl group-hover:scale-110 transition-transform duration-500" />
+
+                    {/* Experience Badge */}
+                    <div className="absolute -bottom-8 -right-8 glass-card p-6 rounded-2xl shadow-2xl animate-bounce-slow">
+                      <p className="text-4xl font-black text-primary">1+</p>
+                      <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest leading-tight">Years Of<br />Experience</p>
+                    </div>
                   </motion.div>
+
+                  {/* Decorative Dots Grid */}
+                  <div className="absolute top-1/2 -left-12 w-32 h-32 bg-dot-grid opacity-20 -z-10" />
                 </div>
               </motion.div>
+
 
               {/* Bio Content */}
               <motion.div
@@ -173,47 +192,60 @@ const About = () => {
                     </ReactMarkdown>
                   </div>
 
-                  {/* Social Links */}
-                  <div className="flex flex-wrap gap-4 mb-6">
-                    {socialLinks.map(({ icon: Icon, url, label }) => url && (
+                  <div className="flex flex-wrap gap-4 mb-10">
+                    {socialLinks.map(({ icon: Icon, url, label }, index) => url && (
                       <motion.a
                         key={label}
                         href={url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        whileHover={{ scale: 1.1, y: -2 }}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.5 + (index * 0.1) }}
+                        whileHover={{ scale: 1.1, y: -4 }}
                         whileTap={{ scale: 0.95 }}
-                        className="p-3 bg-slate-100 dark:bg-slate-700/50 rounded-xl text-slate-600 dark:text-slate-400 hover:text-primary hover:bg-primary/10 dark:hover:bg-primary/20 transition-all duration-300 shadow-md hover:shadow-lg"
+                        className="p-4 bg-white/50 dark:bg-slate-800/50 backdrop-blur-xl rounded-2xl text-slate-600 dark:text-slate-400 hover:text-primary hover:shadow-xl hover:shadow-primary/10 border border-slate-200/50 dark:border-slate-700/50 transition-all duration-300"
                         aria-label={label}
                       >
-                        <Icon size={24} />
+                        <Icon size={22} />
                       </motion.a>
                     ))}
-                    {profile?.email && (
-                      <motion.a
-                        href={`mailto:${profile.email}`}
-                        whileHover={{ scale: 1.1, y: -2 }}
-                        whileTap={{ scale: 0.95 }}
-                        className="p-3 bg-slate-100 dark:bg-slate-700/50 rounded-xl text-slate-600 dark:text-slate-400 hover:text-primary hover:bg-primary/10 dark:hover:bg-primary/20 transition-all duration-300 shadow-md hover:shadow-lg"
-                        aria-label="Email"
-                      >
-                        <Mail size={24} />
-                      </motion.a>
-                    )}
                   </div>
 
-                  {/* Download Resume Button */}
-                  {profile?.resumeUrl && (
-                    <Link
-                      to="/resume"
-                      className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-primary to-purple-600 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+                  {/* CTA Buttons */}
+                  <div className="flex flex-wrap gap-5">
+                    {profile?.resumeUrl && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.8 }}
+                      >
+                        <Link
+                          to="/resume"
+                          className="group px-8 py-4 bg-primary text-white rounded-2xl font-bold flex items-center justify-center hover:shadow-2xl hover:shadow-primary/40 hover:scale-[1.02] transition-all duration-300 relative overflow-hidden"
+                        >
+                          <span className="relative z-10">View my Resume</span>
+                          <Download className="ml-2 group-hover:translate-y-0.5 transition-transform relative z-10" size={20} />
+                          <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-primary opacity-0 group-hover:opacity-100 transition-opacity" />
+                        </Link>
+                      </motion.div>
+                    )}
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.9 }}
                     >
-                      <Download size={20} />
-                      View Resume
-                    </Link>
-                  )}
+                      <Link
+                        to="/contact"
+                        className="group px-8 py-4 bg-white/50 dark:bg-slate-800/50 backdrop-blur-xl border border-slate-200 dark:border-slate-700 rounded-2xl font-bold flex items-center justify-center hover:border-primary hover:bg-primary/5 hover:scale-[1.02] transition-all duration-300 shadow-sm"
+                      >
+                        Initiate Collaboration
+                      </Link>
+                    </motion.div>
+                  </div>
                 </div>
               </motion.div>
+
             </div>
           </section>
 
@@ -286,6 +318,42 @@ const About = () => {
             </motion.section>
           </div>
 
+          {/* Philosophies of Engineering */}
+          <motion.section
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mb-32"
+          >
+            <SectionHeader
+              title="Engineering Philosophies"
+              subtitle="Core principles that drive my development process."
+            />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-12">
+              {[
+                { title: 'Scalability First', desc: 'Designing systems that grow seamlessly with user demands and data volume.', icon: TrendingUp },
+                { title: 'SOLID Principles', desc: 'Executing clean, maintainable, and decoupled code for long-term project health.', icon: Code },
+                { title: 'User-Centric Design', desc: 'Bridging the gap between complex backend logic and intuitive frontend experiences.', icon: Users },
+                { title: 'Continuous Evolution', desc: 'Perpetual learning and integration of state-of-the-art technologies and patterns.', icon: Sparkles }
+              ].map((phi, idx) => (
+                <motion.div
+                  key={phi.title}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: idx * 0.1 }}
+                  className="glass-card p-8 group hover:scale-[1.02] transition-all"
+                >
+                  <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <phi.icon className="text-primary w-6 h-6" />
+                  </div>
+                  <h3 className="font-black text-xl mb-3 dark:text-white">{phi.title}</h3>
+                  <p className="text-slate-600 dark:text-slate-400 font-medium leading-relaxed">{phi.desc}</p>
+                </motion.div>
+              ))}
+            </div>
+          </motion.section>
+
           {/* Skills & Tools */}
           <motion.section
             initial={{ opacity: 0, y: 20 }}
@@ -295,8 +363,8 @@ const About = () => {
             className="mb-32"
           >
             <SectionHeader
-              title="Skills & Tools"
-              subtitle="My technical expertise across different domains."
+              title="Technical Arsenal"
+              subtitle="My technical expertise across the engineering spectrum."
             />
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
               {Object.entries(skillsByCategory).map(([category, categorySkills], index) => (
@@ -306,29 +374,37 @@ const About = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
-                  whileHover={{ y: -4 }}
-                  className="relative bg-white/60 dark:bg-slate-800/60 backdrop-blur-xl p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-slate-200/50 dark:border-slate-700/50 overflow-hidden group"
+                  whileHover={{ y: -8 }}
+                  className="relative group h-full"
                 >
-                  {/* Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="glass-card p-10 h-full relative overflow-hidden flex flex-col">
+                    {/* Glowing background hint */}
+                    <div className="absolute -top-10 -right-10 w-40 h-40 bg-primary/5 rounded-full blur-3xl group-hover:bg-primary/10 transition-colors" />
 
-                  <div className="relative z-10">
-                    <h3 className="text-2xl md:text-3xl font-black mb-8 tracking-tighter bg-gradient-to-r from-primary via-blue-600 to-purple-600 bg-clip-text text-transparent uppercase">
-                      {category}
-                    </h3>
-                    <div className="space-y-4">
+                    <div className="relative z-10 mb-8 flex items-center justify-between">
+                      <h3 className="text-2xl font-black tracking-tight text-gradient uppercase">
+                        {category}
+                      </h3>
+                      <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
+                        <Code className="text-primary w-5 h-5" />
+                      </div>
+                    </div>
+
+                    <div className="space-y-6 flex-grow">
                       {categorySkills.map((skill) => (
                         <SkillBar key={skill._id} skill={skill} />
                       ))}
                     </div>
-                  </div>
 
-                  {/* Decorative Element */}
-                  <div className="absolute -bottom-8 -right-8 w-32 h-32 bg-gradient-to-br from-primary/10 to-purple-500/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500" />
+                    <div className="mt-8 pt-6 border-t border-slate-200/50 dark:border-slate-700/50">
+                      <p className="text-[10px] uppercase tracking-[0.2em] font-black text-slate-400 dark:text-slate-500">Mastery Level Established</p>
+                    </div>
+                  </div>
                 </motion.div>
               ))}
             </div>
           </motion.section>
+
 
           {/* Certifications - Featured Section */}
           <motion.section

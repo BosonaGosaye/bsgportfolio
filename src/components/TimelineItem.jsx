@@ -31,7 +31,7 @@ const TimelineItem = ({ title, subtitle, duration, description, responsibilities
           y: -4,
           transition: { duration: 0.3, ease: 'easeOut' }
         }}
-        className="relative bg-white/60 dark:bg-slate-800/60 backdrop-blur-xl rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 border border-slate-200/50 dark:border-slate-700/50 overflow-hidden"
+        className="glass-card rounded-2xl p-6 group-hover:border-primary/50 transition-all duration-300 relative overflow-hidden"
       >
         {/* Gradient Overlay on Hover */}
         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />

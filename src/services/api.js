@@ -6,40 +6,71 @@ const api = axios.create({
   baseURL: API_URL,
 });
 
+// Response interceptor for handling 401s and other global errors
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    // If we get a 401 Unauthorized (and it's not the login request itself)
+    if (error.response && error.response.status === 401 && !error.config.url.includes('/auth/login')) {
+      console.warn('Session expired or invalid token. Redirecting to login...');
+      localStorage.removeItem('userInfo');
+
+      // Only redirect if we're not already on the login page
+      if (!window.location.pathname.includes('/admin/login')) {
+        window.location.href = '/admin/login';
+      }
+    }
+    return Promise.reject(error);
+  }
+);
+
 // Simple persistent cache for GET requests
 const CACHE_KEY_PREFIX = 'api_cache_';
 const CACHE_DURATION = 30 * 60 * 1000; // 30 minutes for persistence
 
-const getCached = async (url, params = {}) => {
+const getCached = async (url, params = {}, options = {}) => {
+  const { forceRefresh = false, persist = true } = options;
   const cacheKey = CACHE_KEY_PREFIX + JSON.stringify({ url, params });
-  
-  // Try to get from localStorage first
+
+  // Try to get from localStorage first for persistence
   const cachedItem = localStorage.getItem(cacheKey);
+  let cachedData = null;
+
   if (cachedItem) {
     const { data, timestamp } = JSON.parse(cachedItem);
-    if (Date.now() - timestamp < CACHE_DURATION) {
-      // Still valid, return it but you could also fetch in background to refresh (Stale-While-Revalidate)
+    const isExpired = Date.now() - timestamp > CACHE_DURATION;
+
+    if (!isExpired && !forceRefresh) {
       return data;
     }
+    // If expired or forceRefresh, we'll still return cachedData for SWR if available
+    cachedData = data;
   }
 
-  // Fetch from API
-  const response = await api.get(url, { params });
-  
-  // Save to localStorage
-  try {
-    localStorage.setItem(cacheKey, JSON.stringify({
-      data: response,
-      timestamp: Date.now()
-    }));
-  } catch (e) {
-    // If localStorage is full, clear old cache items
-    Object.keys(localStorage)
-      .filter(key => key.startsWith(CACHE_KEY_PREFIX))
-      .forEach(key => localStorage.removeItem(key));
+  // Fetch function to be used for background refresh or initial fetch
+  const fetchData = async () => {
+    try {
+      const response = await api.get(url, { params });
+      if (persist) {
+        localStorage.setItem(cacheKey, JSON.stringify({
+          data: response,
+          timestamp: Date.now()
+        }));
+      }
+      return response;
+    } catch (error) {
+      console.error(`API Error for ${url}:`, error);
+      throw error;
+    }
+  };
+
+  // SWR Pattern: If we have cached data, return it immediately and fetch in background
+  if (cachedData && !forceRefresh) {
+    fetchData().catch(err => console.error("SWR Background Refresh Failed", err));
+    return cachedData;
   }
-  
-  return response;
+
+  return fetchData();
 };
 
 // Function to clear all cache
@@ -48,6 +79,10 @@ const clearCache = () => {
     .filter(key => key.startsWith(CACHE_KEY_PREFIX))
     .forEach(key => localStorage.removeItem(key));
 };
+
+// Consolidated Home Data
+export const getHomeData = (forceRefresh = false) => getCached('/home', {}, { forceRefresh });
+
 
 // Profile
 export const getProfile = () => getCached('/profile');

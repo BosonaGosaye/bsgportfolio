@@ -23,7 +23,9 @@ app.use(cors(corsOptions));
 app.use(morgan('dev'));
 
 // Routes (to be added)
+app.use('/api/home', require('./routes/homeRoutes'));
 app.use('/api/profile', require('./routes/profileRoutes'));
+
 app.use('/api/projects', require('./routes/projectRoutes'));
 app.use('/api/skills', require('./routes/skillRoutes'));
 app.use('/api/blogs', require('./routes/blogRoutes'));

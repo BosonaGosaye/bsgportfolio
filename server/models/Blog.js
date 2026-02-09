@@ -16,4 +16,7 @@ const blogSchema = new mongoose.Schema({
   views: { type: Number, default: 0 }
 }, { timestamps: true });
 
+blogSchema.index({ isPublished: 1, createdAt: -1 });
+
 module.exports = mongoose.model('Blog', blogSchema);
+

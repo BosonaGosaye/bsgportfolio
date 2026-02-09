@@ -66,14 +66,7 @@ const Services = () => {
             />
 
             {/* Hero Section */}
-            <section className="relative min-h-[50vh] flex items-center pt-20 overflow-hidden">
-                {/* Animated Background */}
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-purple-500/10 to-pink-500/10 animate-gradient-shift" />
-
-                {/* Floating Orbs */}
-                <div className="absolute top-20 left-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl animate-blob" />
-                <div className="absolute bottom-20 right-10 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-blob animation-delay-2000" />
-
+            <section className="relative min-h-[50vh] flex items-center pt-24 overflow-hidden">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -131,7 +124,7 @@ const Services = () => {
             </section>
 
             {/* Services Grid */}
-            <section className="py-20 bg-slate-50 dark:bg-slate-900">
+            <section className="py-24 relative">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     {loading ? (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -204,7 +197,7 @@ const Services = () => {
             </section>
 
             {/* Additional Info Section */}
-            <section className="py-20 bg-slate-100 dark:bg-slate-800/50">
+            <section className="py-24 relative">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}

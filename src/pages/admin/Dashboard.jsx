@@ -10,38 +10,65 @@ import {
   PlusCircle,
   Wrench
 } from 'lucide-react';
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  AreaChart,
-  Area
-} from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
 import { useAuth } from '../../context/AuthContext';
 import { getAdminStats } from '../../services/api';
 import Meta from '../../components/Meta';
 import { Link } from 'react-router-dom';
+import { useTheme } from '../../context/ThemeContext';
+import { useRef, useLayoutEffect } from 'react';
+
+// Custom hook to track container dimensions robustly
+const useDimensions = (ref) => {
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+
+  useLayoutEffect(() => {
+    if (!ref.current) return;
+
+    const observer = new ResizeObserver((entries) => {
+      if (!entries || entries.length === 0) return;
+      const { width, height } = entries[0].contentRect;
+      if (width > 0 && height > 0) {
+        setDimensions({ width, height });
+      }
+    });
+
+    observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, [ref]);
+
+  return dimensions;
+};
 
 const Dashboard = () => {
   const { user } = useAuth();
+  const { theme } = useTheme();
+
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [chartsReady, setChartsReady] = useState(false);
+
+  const blogViewsRef = useRef(null);
+  const projectPopRef = useRef(null);
+  const blogDims = useDimensions(blogViewsRef);
+  const projectDims = useDimensions(projectPopRef);
+
 
   useEffect(() => {
     const fetchStats = async () => {
       try {
         const res = await getAdminStats(user.token);
         setData(res.data);
+        // Larger delay after loading finishes to ensure layout is fully stable
+        setTimeout(() => setChartsReady(true), 500);
       } catch (err) {
+
         console.error('Error fetching admin stats:', err);
       } finally {
         setLoading(false);
       }
     };
+
 
     if (user?.token) {
       fetchStats();
@@ -107,28 +134,41 @@ const Dashboard = () => {
               Top Blog Posts (Views)
             </h2>
           </div>
-          <div className="h-80 w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={data?.charts?.blogViews}>
-                <defs>
-                  <linearGradient id="colorViews" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#10b981" stopOpacity={0.1} />
-                    <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
-                <XAxis
-                  dataKey="title"
-                  hide={true}
-                />
-                <YAxis stroke="#94a3b8" fontSize={12} tickLine={false} axisLine={false} />
-                <Tooltip
-                  contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
-                />
-                <Area type="monotone" dataKey="views" stroke="#10b981" fillOpacity={1} fill="url(#colorViews)" strokeWidth={3} />
-              </AreaChart>
-            </ResponsiveContainer>
+          <div ref={blogViewsRef} className="w-full h-[300px] relative overflow-hidden bg-slate-50/50 dark:bg-slate-900/50 rounded-2xl border border-dashed border-slate-200 dark:border-slate-700 flex items-center justify-center">
+            {chartsReady && data?.charts?.blogViews && blogDims.width > 0 && blogDims.height > 0 ? (
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={data.charts.blogViews} width={blogDims.width} height={blogDims.height}>
+                  <defs>
+                    <linearGradient id="colorViews" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#10b981" stopOpacity={0.1} />
+                      <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={theme === 'dark' ? '#1e293b' : '#e2e8f0'} />
+                  <XAxis dataKey="title" hide={true} />
+                  <YAxis stroke="#94a3b8" fontSize={12} tickLine={false} axisLine={false} />
+                  <Tooltip
+                    contentStyle={{
+                      borderRadius: '12px',
+                      border: 'none',
+                      boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)',
+                      backgroundColor: theme === 'dark' ? '#0f172a' : '#ffffff',
+                      color: theme === 'dark' ? '#f1f5f9' : '#1e293b'
+                    }}
+                  />
+                  <Area type="monotone" dataKey="views" stroke="#10b981" fillOpacity={1} fill="url(#colorViews)" strokeWidth={3} />
+                </AreaChart>
+              </ResponsiveContainer>
+            ) : (
+              <div className="flex flex-col items-center gap-2 text-slate-400">
+                <TrendingUp size={32} className="animate-pulse opacity-20" />
+                <span className="text-xs font-medium uppercase tracking-widest opacity-40">Calculating Grid...</span>
+              </div>
+            )}
           </div>
+
+
+
         </div>
 
         {/* Project Popularity Chart */}
@@ -139,19 +179,35 @@ const Dashboard = () => {
               Project Popularity
             </h2>
           </div>
-          <div className="h-80 w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={data?.charts?.projectPopularity}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
-                <XAxis dataKey="title" hide={true} />
-                <YAxis stroke="#94a3b8" fontSize={12} tickLine={false} axisLine={false} />
-                <Tooltip
-                  contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
-                />
-                <Bar dataKey="popularity" fill="#3b82f6" radius={[4, 4, 0, 0]} barSize={40} />
-              </BarChart>
-            </ResponsiveContainer>
+          <div ref={projectPopRef} className="w-full h-[300px] relative overflow-hidden bg-slate-50/50 dark:bg-slate-900/50 rounded-2xl border border-dashed border-slate-200 dark:border-slate-700 flex items-center justify-center">
+            {chartsReady && data?.charts?.projectPopularity && projectDims.width > 0 && projectDims.height > 0 ? (
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={data.charts.projectPopularity} width={projectDims.width} height={projectDims.height}>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={theme === 'dark' ? '#1e293b' : '#e2e8f0'} />
+                  <XAxis dataKey="title" hide={true} />
+                  <YAxis stroke="#94a3b8" fontSize={12} tickLine={false} axisLine={false} />
+                  <Tooltip
+                    contentStyle={{
+                      borderRadius: '12px',
+                      border: 'none',
+                      boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)',
+                      backgroundColor: theme === 'dark' ? '#0f172a' : '#ffffff',
+                      color: theme === 'dark' ? '#f1f5f9' : '#1e293b'
+                    }}
+                  />
+                  <Bar dataKey="popularity" fill="#3b82f6" radius={[4, 4, 0, 0]} barSize={40} />
+                </BarChart>
+              </ResponsiveContainer>
+            ) : (
+              <div className="flex flex-col items-center gap-2 text-slate-400">
+                <Briefcase size={32} className="animate-pulse opacity-20" />
+                <span className="text-xs font-medium uppercase tracking-widest opacity-40">Calculating Grid...</span>
+              </div>
+            )}
           </div>
+
+
+
         </div>
       </div>
 

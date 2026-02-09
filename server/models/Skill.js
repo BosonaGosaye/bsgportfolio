@@ -7,4 +7,7 @@ const skillSchema = new mongoose.Schema({
   icon: { type: String }
 }, { timestamps: true });
 
+skillSchema.index({ category: 1 });
+
+
 module.exports = mongoose.model('Skill', skillSchema);

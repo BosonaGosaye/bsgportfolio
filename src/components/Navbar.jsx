@@ -1,12 +1,22 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, Sun, Moon } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import * as api from '../services/api';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const { theme, toggleTheme } = useTheme();
+  const location = useLocation();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const navLinks = [
     { name: 'Home', path: '/' },
@@ -47,41 +57,51 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="sticky top-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
+    <nav 
+      className={`sticky top-0 z-50 transition-all duration-300 ${
+        scrolled 
+          ? 'bg-white/70 dark:bg-slate-900/70 backdrop-blur-lg border-b border-slate-200/50 dark:border-slate-800/50 shadow-sm' 
+          : 'bg-transparent border-b border-transparent'
+      }`}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
+        <div className="flex justify-between h-20">
           <div className="flex items-center">
             <Link 
               to="/" 
               onMouseEnter={() => prefetchData('/')}
-              className="text-2xl font-bold bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent"
+              className="text-2xl font-black tracking-tighter bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent hover:scale-105 transition-transform"
             >
               BSG
             </Link>
           </div>
 
           {/* Desktop Nav */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden md:flex items-center space-x-1">
             {navLinks.map((link) => (
               <Link
                 key={link.name}
                 to={link.path}
                 onMouseEnter={() => prefetchData(link.path)}
-                className="relative text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary transition-colors font-medium group"
+                className={`relative px-4 py-2 text-sm font-semibold transition-all duration-200 rounded-full ${
+                  location.pathname === link.path
+                    ? 'text-primary bg-primary/5'
+                    : 'text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary hover:bg-slate-100 dark:hover:bg-slate-800'
+                }`}
               >
                 {link.name}
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-primary to-purple-600 group-hover:w-full transition-all duration-300"></span>
               </Link>
             ))}
+            <div className="h-6 w-[1px] bg-slate-200 dark:bg-slate-700 mx-2" />
             <button
               id="theme-toggle-desktop"
               name="theme-toggle-desktop"
               type="button"
               onClick={toggleTheme}
-              className="p-2 text-slate-600 dark:text-slate-300 hover:text-primary hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-all hover:scale-110"
+              className="p-2 text-slate-600 dark:text-slate-300 hover:text-primary bg-slate-100/50 dark:bg-slate-800/50 rounded-full transition-all hover:scale-110 border border-slate-200/50 dark:border-slate-700/50"
               aria-label="Toggle theme"
             >
-              {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
+              {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
             </button>
           </div>
 

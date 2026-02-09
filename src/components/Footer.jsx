@@ -19,36 +19,36 @@ const Footer = () => {
   }, []);
 
   return (
-    <footer className="bg-[#5D4037] border-t border-white/10 py-12">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
-          <div>
-            <h3 className="text-xl font-bold mb-4 text-white">BSG Portfolio</h3>
-            <p className="text-slate-200">
-              Building modern web applications with a focus on performance and user experience.
+    <footer className="relative mt-auto py-16 bg-amber-100 dark:bg-slate-900 border-t border-amber-200 dark:border-slate-700 overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 text-center md:text-left">
+          <div className="col-span-1 md:col-span-2">
+            <h3 className="text-2xl font-black tracking-tighter mb-6 bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">BSG Portfolio</h3>
+            <p className="text-slate-600 dark:text-slate-400 text-lg leading-relaxed max-w-md">
+              Crafting exceptional digital experiences through innovative code and modern design principles. Focused on building scalable, user-centric solutions.
             </p>
           </div>
           <div>
-            <h4 className="text-lg font-semibold mb-4 text-white">Quick Links</h4>
-            <ul className="space-y-2 text-slate-200">
-              <li><a href="/" className="hover:text-white transition-colors">Home</a></li>
-              <li><a href="/projects" className="hover:text-white transition-colors">Projects</a></li>
-              <li><a href="/blog" className="hover:text-white transition-colors">Blog</a></li>
-              <li><a href="/contact" className="hover:text-white transition-colors">Contact</a></li>
+            <h4 className="text-sm font-bold uppercase tracking-widest mb-6 text-slate-900 dark:text-white">Quick Links</h4>
+            <ul className="space-y-4">
+              <li><a href="/" className="text-slate-600 dark:text-slate-400 hover:text-primary transition-colors font-medium">Home</a></li>
+              <li><a href="/projects" className="text-slate-600 dark:text-slate-400 hover:text-primary transition-colors font-medium">Projects</a></li>
+              <li><a href="/blog" className="text-slate-600 dark:text-slate-400 hover:text-primary transition-colors font-medium">Blog</a></li>
+              <li><a href="/contact" className="text-slate-600 dark:text-slate-400 hover:text-primary transition-colors font-medium">Contact</a></li>
             </ul>
           </div>
           <div>
-            <h4 className="text-lg font-semibold mb-4 text-white">Connect</h4>
-            <div className="flex justify-center md:justify-start space-x-4">
+            <h4 className="text-sm font-bold uppercase tracking-widest mb-6 text-slate-900 dark:text-white">Connect</h4>
+            <div className="flex justify-center md:justify-start gap-4">
               {profile?.socialLinks?.github && (
                 <a
                   href={profile.socialLinks.github}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-slate-200 hover:text-white transition-colors"
+                  className="p-3 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:text-primary hover:border-primary transition-all"
                   aria-label="GitHub"
                 >
-                  <Github size={24} />
+                  <Github size={20} />
                 </a>
               )}
               {profile?.socialLinks?.linkedin && (
@@ -56,21 +56,10 @@ const Footer = () => {
                   href={profile.socialLinks.linkedin}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-slate-200 hover:text-white transition-colors"
+                  className="p-3 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:text-primary hover:border-primary transition-all"
                   aria-label="LinkedIn"
                 >
-                  <Linkedin size={24} />
-                </a>
-              )}
-              {profile?.socialLinks?.twitter && (
-                <a
-                  href={profile.socialLinks.twitter}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-slate-200 hover:text-white transition-colors"
-                  aria-label="Twitter"
-                >
-                  <Twitter size={24} />
+                  <Linkedin size={20} />
                 </a>
               )}
               {profile?.socialLinks?.instagram && (
@@ -78,26 +67,26 @@ const Footer = () => {
                   href={profile.socialLinks.instagram}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-slate-200 hover:text-white transition-colors"
+                  className="p-3 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:text-primary hover:border-primary transition-all"
                   aria-label="Instagram"
                 >
-                  <Instagram size={24} />
+                  <Instagram size={20} />
                 </a>
               )}
               {profile?.email && (
                 <a
                   href={`mailto:${profile.email}`}
-                  className="text-slate-200 hover:text-white transition-colors"
+                  className="p-3 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:text-primary hover:border-primary transition-all"
                   aria-label="Email"
                 >
-                  <Mail size={24} />
+                  <Mail size={20} />
                 </a>
               )}
             </div>
           </div>
         </div>
-        <div className="mt-12 pt-8 border-t border-white/10 text-center text-slate-300">
-          <p>&copy; {new Date().getFullYear()} BSG Portfolio. All rights reserved. /Developed by <b>Bosona G.</b></p>
+        <div className="mt-16 pt-8 border-t border-slate-200 dark:border-slate-800 text-center">
+          <p className="text-slate-500 dark:text-slate-500 font-medium">&copy; {new Date().getFullYear()} BSG Portfolio. All rights reserved.</p>
         </div>
       </div>
     </footer>

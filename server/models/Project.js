@@ -18,4 +18,7 @@ const projectSchema = new mongoose.Schema({
   popularity: { type: Number, default: 0 }
 }, { timestamps: true });
 
+projectSchema.index({ isFeatured: 1, createdAt: -1 });
+
 module.exports = mongoose.model('Project', projectSchema);
+
