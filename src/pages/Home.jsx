@@ -337,17 +337,20 @@ const Home = () => {
                   <Sparkles className="w-10 h-10 text-primary" />
                   <h2 className="text-4xl md:text-5xl font-black tracking-tighter text-gradient">About Me</h2>
                 </div>
-                <div className="prose prose-xl dark:prose-invert max-w-none mb-12">
-                  <ReactMarkdown
-                    components={{
-                      p: ({ children }) => <p className="text-slate-700 dark:text-slate-300 leading-relaxed mb-8 text-xl font-medium">{children}</p>,
-                      strong: ({ children }) => <strong className="text-primary font-black">{children}</strong>,
-                      li: ({ children }) => <li className="text-slate-700 dark:text-slate-300 mb-4 text-xl font-medium flex items-start gap-3"><span className="w-2 h-2 rounded-full bg-primary mt-3 shrink-0" />{children}</li>,
-                    }}
-                  >
-                    {profile?.bio || profile?.shortBio}
-                  </ReactMarkdown>
-                </div>
+                <div className="prose prose-xl md:prose-2xl dark:prose-invert max-w-none mb-12 text-slate-700 dark:text-slate-300 leading-relaxed font-medium">
+                     <ReactMarkdown
+                      components={{
+                        p: ({ children }) => <p className="mb-8 leading-relaxed text-xl">{children}</p>,
+                        strong: ({ children }) => <strong className="text-primary dark:text-primary font-black border-b-4 border-primary/20">{children}</strong>,
+                        em: ({ children }) => <em className="text-purple-600 dark:text-purple-400 italic not-italic font-bold bg-purple-500/10 px-2 rounded-md">{children}</em>,
+                        li: ({ children }) => <li className="mb-4 text-xl list-none flex items-start gap-3"><span className="w-2 h-2 rounded-full bg-primary mt-3 shrink-0" />{children}</li>,
+                        a: ({ children, href }) => <a href={href} className="text-primary hover:text-blue-700 underline decoration-4 underline-offset-8 transition-all font-black" target="_blank" rel="noopener noreferrer">{children}</a>
+                       }}
+                      >
+                        {profile?.bio}
+                     </ReactMarkdown>
+                 </div>
+                
 
                 <Link
                   to="/about"
