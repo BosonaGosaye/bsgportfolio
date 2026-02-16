@@ -25,7 +25,7 @@ const AdminSidebar = () => {
   ];
 
   return (
-    <aside className="w-full lg:w-64 bg-white dark:bg-slate-800 border-r border-slate-200 dark:border-slate-700 p-6 flex flex-col">
+    <aside className="w-full lg:w-64 h-full bg-white dark:bg-slate-800 border-r border-slate-200 dark:border-slate-700 p-6 flex flex-col">
       <div className="flex items-center mb-10 px-2">
         <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-white font-bold text-xl mr-3">
           B
