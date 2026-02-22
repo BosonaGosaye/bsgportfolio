@@ -126,7 +126,7 @@ const ProjectDetail = () => {
             <img 
               src={allImages[activeImage]} 
               alt={`${project.title} screenshot ${activeImage + 1}`}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-contain"
             />
             {allImages.length > 1 && (
               <>
@@ -150,9 +150,9 @@ const ProjectDetail = () => {
               <button 
                 key={index}
                 onClick={() => setActiveImage(index)}
-                className={`flex-shrink-0 w-32 aspect-video rounded-lg overflow-hidden border-2 transition-all ${activeImage === index ? 'border-primary' : 'border-transparent opacity-60 hover:opacity-100'}`}
+                className={`flex-shrink-0 w-32 aspect-video rounded-lg overflow-hidden border-2 transition-all bg-slate-100 dark:bg-slate-800 ${activeImage === index ? 'border-primary' : 'border-transparent opacity-60 hover:opacity-100'}`}
               >
-                <img src={img} alt="Thumbnail" className="w-full h-full object-cover" />
+                <img src={img} alt="Thumbnail" className="w-full h-full object-contain" />
               </button>
             ))}
           </div>

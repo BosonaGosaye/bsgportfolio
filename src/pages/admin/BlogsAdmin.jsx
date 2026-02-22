@@ -335,7 +335,7 @@ const BlogsAdmin = () => {
                                 <img
                                     src={blog.featuredImage || '/placeholder-blog.jpg'}
                                     alt={blog.title}
-                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                    className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
                                 />
                                 <div className={`absolute top-3 left-3 px-3 py-1 text-white text-xs font-bold rounded-full shadow-lg ${blog.isPublished ? 'bg-emerald-500' : 'bg-slate-500'}`}>
                                     {blog.isPublished ? 'Published' : 'Draft'}

@@ -16,11 +16,11 @@ const BlogCard = ({ blog, readingTime }) => {
       {/* Subtle gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-br from-primary/3 via-transparent to-purple-500/3 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-2xl" />
 
-      <Link to={`/blog/${blog.slug}`} className="aspect-video relative overflow-hidden block">
+      <Link to={`/blog/${blog.slug}`} className="aspect-video relative overflow-hidden block bg-slate-100 dark:bg-slate-800">
         <img
           src={blog.featuredImage || blog.coverImage}
           alt={blog.title}
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
           loading="lazy"
           decoding="async"
         />

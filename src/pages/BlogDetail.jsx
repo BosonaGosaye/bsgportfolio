@@ -123,11 +123,11 @@ const BlogDetail = () => {
           </div>
         </header>
 
-        <div className="aspect-video rounded-3xl overflow-hidden shadow-2xl mb-12">
+        <div className="aspect-video rounded-3xl overflow-hidden shadow-2xl mb-12 bg-slate-100 dark:bg-slate-800">
           <img 
             src={blog.featuredImage} 
             alt={blog.title} 
-            className="w-full h-full object-cover"
+            className="w-full h-full object-contain"
           />
         </div>
 

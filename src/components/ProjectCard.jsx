@@ -47,11 +47,11 @@ const ProjectCard = ({ project, viewMode = 'grid' }) => {
           <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-2xl" />
 
           <div className="flex flex-col md:flex-row relative z-10">
-            <div className="relative overflow-hidden md:w-80 aspect-video md:aspect-auto cursor-pointer" onClick={() => setIsModalOpen(true)}>
+            <div className="relative overflow-hidden md:w-80 aspect-video md:aspect-auto cursor-pointer bg-slate-100 dark:bg-slate-800" onClick={() => setIsModalOpen(true)}>
               <img
                 src={project.coverImage}
                 alt={project.title}
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-110"
                 loading="lazy"
                 decoding="async"
               />
@@ -142,11 +142,11 @@ const ProjectCard = ({ project, viewMode = 'grid' }) => {
           }}
         />
 
-        <div className="relative overflow-hidden aspect-video cursor-pointer" onClick={() => setIsModalOpen(true)}>
+        <div className="relative overflow-hidden aspect-video cursor-pointer bg-slate-100 dark:bg-slate-800" onClick={() => setIsModalOpen(true)}>
           <img
             src={project.coverImage}
             alt={project.title}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+            className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-110"
             loading="lazy"
             decoding="async"
           />
