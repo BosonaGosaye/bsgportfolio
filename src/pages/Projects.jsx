@@ -116,53 +116,79 @@ const Projects = () => {
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        {/* Header with Gradient */}
+        {/* Enhanced Header with Gradient and Animation */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-12"
+          className="text-center mb-16 relative"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/20 rounded-full mb-4">
-            <Sparkles className="w-4 h-4 text-primary" />
-            <span className="text-sm font-semibold text-primary">Portfolio</span>
-          </div>
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-black mb-8 tracking-tighter bg-gradient-to-r from-primary via-blue-600 to-purple-600 bg-clip-text text-transparent drop-shadow-sm">
-            My Projects
-          </h1>
-          <p className="text-xl md:text-2xl text-slate-700 dark:text-slate-300 max-w-3xl mx-auto leading-relaxed font-medium">
+          {/* Animated background elements */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-primary/10 via-purple-500/10 to-pink-500/10 rounded-full blur-[150px] animate-pulse" />
+          
+          <motion.div 
+            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-primary/10 via-purple-500/10 to-pink-500/10 border-2 border-primary/30 rounded-full mb-6 relative z-10"
+            whileHover={{ scale: 1.05 }}
+          >
+            <Sparkles className="w-5 h-5 text-primary animate-pulse" />
+            <span className="text-sm font-black uppercase tracking-widest bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">Portfolio</span>
+          </motion.div>
+          
+          <motion.h1 
+            className="text-6xl md:text-8xl lg:text-9xl font-black mb-10 tracking-tighter relative z-10"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.2 }}
+          >
+            <span className="bg-gradient-to-r from-primary via-blue-600 to-purple-600 bg-clip-text text-transparent drop-shadow-sm animate-gradient-shift">
+              My Projects
+            </span>
+            <motion.div
+              className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-48 h-2 bg-gradient-to-r from-primary via-purple-600 to-pink-600 rounded-full shadow-lg"
+              animate={{ scaleX: [1, 1.2, 1] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            />
+          </motion.h1>
+          
+          <p className="text-xl md:text-2xl text-slate-700 dark:text-slate-300 max-w-3xl mx-auto leading-relaxed font-medium relative z-10">
             A collection of my work, experiments, and open-source contributions.
           </p>
         </motion.div>
 
-        {/* Enhanced Search and Filters Bar with Glassmorphism */}
+        {/* Enhanced Search and Filters Bar with Glassmorphism and 3D Effects */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="relative bg-white/70 dark:bg-slate-800/70 backdrop-blur-xl p-6 rounded-2xl shadow-lg border border-slate-200/50 dark:border-slate-700/50 mb-12"
+          className="relative bg-gradient-to-br from-white/80 via-white/70 to-white/60 dark:from-slate-800/80 dark:via-slate-800/70 dark:to-slate-800/60 backdrop-blur-2xl p-8 rounded-3xl shadow-2xl border-2 border-white/50 dark:border-slate-700/50 mb-16 group"
         >
-          {/* Gradient Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-purple-500/5 rounded-2xl pointer-events-none" />
+          {/* Animated Gradient Overlay */}
+          <motion.div 
+            className="absolute inset-0 bg-gradient-to-br from-primary/5 via-purple-500/5 to-pink-500/5 rounded-3xl pointer-events-none"
+            animate={{
+              backgroundPosition: ['0% 0%', '100% 100%', '0% 0%']
+            }}
+            transition={{ duration: 10, repeat: Infinity }}
+          />
 
           <div className="relative z-10">
-            <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-4">
-              {/* Search */}
-              <div className="lg:col-span-2 relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-6">
+              {/* Enhanced Search */}
+              <div className="lg:col-span-2 relative group/search">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within/search:text-primary transition-colors z-10" size={22} />
                 <input
                   type="text"
                   placeholder="Search by title or tech stack..."
-                  className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
+                  className="w-full pl-12 pr-4 py-4 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-2 border-slate-200 dark:border-slate-700 rounded-2xl focus:ring-4 focus:ring-primary/20 focus:border-primary outline-none transition-all shadow-sm hover:shadow-md font-medium"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </div>
 
-              {/* Category Filter */}
-              <div className="relative">
-                <Filter className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" size={18} />
+              {/* Enhanced Category Filter */}
+              <div className="relative group/filter">
+                <Filter className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none z-10" size={20} />
                 <select
-                  className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl outline-none cursor-pointer appearance-none focus:ring-2 focus:ring-primary transition-all"
+                  className="w-full pl-12 pr-4 py-4 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-2 border-slate-200 dark:border-slate-700 rounded-2xl outline-none cursor-pointer appearance-none focus:ring-4 focus:ring-primary/20 focus:border-primary transition-all shadow-sm hover:shadow-md font-bold"
                   value={selectedCategory}
                   onChange={(e) => setSelectedCategory(e.target.value)}
                 >
@@ -172,11 +198,11 @@ const Projects = () => {
                 </select>
               </div>
 
-              {/* Sort */}
-              <div className="relative">
-                <SlidersHorizontal className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" size={18} />
+              {/* Enhanced Sort */}
+              <div className="relative group/sort">
+                <SlidersHorizontal className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none z-10" size={20} />
                 <select
-                  className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl outline-none cursor-pointer appearance-none focus:ring-2 focus:ring-primary transition-all"
+                  className="w-full pl-12 pr-4 py-4 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-2 border-slate-200 dark:border-slate-700 rounded-2xl outline-none cursor-pointer appearance-none focus:ring-4 focus:ring-primary/20 focus:border-primary transition-all shadow-sm hover:shadow-md font-bold"
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
                 >
@@ -187,47 +213,58 @@ const Projects = () => {
               </div>
             </div>
 
-            {/* View Toggle and Clear Filters */}
+            {/* Enhanced View Toggle and Clear Filters */}
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-semibold text-slate-600 dark:text-slate-400">
+              <div className="flex items-center gap-3">
+                <motion.span 
+                  className="text-sm font-black text-slate-600 dark:text-slate-400 px-4 py-2 bg-slate-100 dark:bg-slate-900/50 rounded-full"
+                  key={filteredProjects.length}
+                  initial={{ scale: 1.2 }}
+                  animate={{ scale: 1 }}
+                >
                   {filteredProjects.length} {filteredProjects.length === 1 ? 'project' : 'projects'} found
-                </span>
+                </motion.span>
                 {hasActiveFilters && (
                   <motion.button
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
                     onClick={clearFilters}
-                    className="flex items-center gap-1 px-3 py-1 text-xs font-semibold text-primary hover:bg-primary/10 rounded-full transition-colors"
+                    className="flex items-center gap-2 px-4 py-2 text-sm font-black text-white bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 rounded-full transition-all shadow-lg hover:shadow-xl"
                   >
-                    <X size={14} />
+                    <X size={16} />
                     Clear filters
                   </motion.button>
                 )}
               </div>
 
-              {/* View Mode Toggle */}
-              <div className="flex items-center gap-2 bg-slate-100 dark:bg-slate-900/50 p-1 rounded-lg">
-                <button
+              {/* Enhanced View Mode Toggle */}
+              <div className="flex items-center gap-2 bg-slate-100 dark:bg-slate-900/50 p-1.5 rounded-xl shadow-inner">
+                <motion.button
                   onClick={() => handleViewModeChange('grid')}
-                  className={`p-2 rounded-lg transition-all ${viewMode === 'grid'
-                      ? 'bg-white dark:bg-slate-700 text-primary shadow-md'
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className={`p-3 rounded-lg transition-all ${viewMode === 'grid'
+                      ? 'bg-gradient-to-r from-primary to-purple-600 text-white shadow-lg'
                       : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'
                     }`}
                   aria-label="Grid view"
                 >
-                  <LayoutGrid size={18} />
-                </button>
-                <button
+                  <LayoutGrid size={20} />
+                </motion.button>
+                <motion.button
                   onClick={() => handleViewModeChange('list')}
-                  className={`p-2 rounded-lg transition-all ${viewMode === 'list'
-                      ? 'bg-white dark:bg-slate-700 text-primary shadow-md'
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className={`p-3 rounded-lg transition-all ${viewMode === 'list'
+                      ? 'bg-gradient-to-r from-primary to-purple-600 text-white shadow-lg'
                       : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'
                     }`}
                   aria-label="List view"
                 >
-                  <List size={18} />
-                </button>
+                  <List size={20} />
+                </motion.button>
               </div>
             </div>
           </div>

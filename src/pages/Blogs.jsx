@@ -112,70 +112,95 @@ const Blogs = () => {
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        {/* Header */}
+        {/* Enhanced Header with 3D Animation */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-12"
+          className="text-center mb-16 relative"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/20 rounded-full mb-4">
-            <Sparkles className="w-4 h-4 text-primary" />
-            <span className="text-sm font-semibold text-primary">Blog</span>
-          </div>
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-black mb-8 tracking-tighter bg-gradient-to-r from-primary via-blue-600 to-purple-600 bg-clip-text text-transparent drop-shadow-sm">
-            Latest Articles
-          </h1>
-          <p className="text-xl md:text-2xl text-slate-700 dark:text-slate-300 max-w-3xl mx-auto leading-relaxed font-medium">
+          {/* Animated background */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-gradient-to-r from-primary/10 via-purple-500/10 to-pink-500/10 rounded-full blur-[150px] animate-pulse" />
+          
+          <motion.div 
+            className="inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-primary/10 via-purple-500/10 to-pink-500/10 border-2 border-primary/30 rounded-full mb-8 relative z-10 shadow-lg"
+            whileHover={{ scale: 1.05, rotate: 2 }}
+          >
+            <Sparkles className="w-5 h-5 text-primary animate-pulse" />
+            <span className="text-sm font-black uppercase tracking-widest bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">Blog</span>
+          </motion.div>
+          
+          <motion.h1 
+            className="text-6xl md:text-8xl lg:text-9xl font-black mb-10 tracking-tighter relative z-10"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.2 }}
+          >
+            <span className="bg-gradient-to-r from-primary via-blue-600 to-purple-600 bg-clip-text text-transparent drop-shadow-sm animate-gradient-shift">
+              Latest Articles
+            </span>
+            <motion.div
+              className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-56 h-2 bg-gradient-to-r from-primary via-purple-600 to-pink-600 rounded-full shadow-lg"
+              animate={{ scaleX: [1, 1.2, 1] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            />
+          </motion.h1>
+          
+          <p className="text-xl md:text-2xl text-slate-700 dark:text-slate-300 max-w-3xl mx-auto leading-relaxed font-medium relative z-10">
             Sharing knowledge, experiences, and the latest trends in technology.
           </p>
         </motion.div>
 
-        {/* Featured Blog Hero */}
+        {/* Featured Blog Hero with Enhanced Design */}
         {featuredBlog && currentPage === 1 && !loading && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="mb-16 relative group"
+            className="mb-20 relative group"
           >
             <Link to={`/blog/${featuredBlog.slug}`}>
-              <div className="relative h-96 rounded-3xl overflow-hidden shadow-2xl">
-                <img
+              <div className="relative h-[500px] rounded-[3rem] overflow-hidden shadow-2xl border-4 border-white/20 dark:border-slate-800/20">
+                <motion.img
                   src={featuredBlog.coverImage}
                   alt={featuredBlog.title}
                   loading="eager"
                   decoding="async"
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  className="w-full h-full object-cover"
+                  whileHover={{ scale: 1.1 }}
+                  transition={{ duration: 0.6 }}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
 
-                <div className="absolute bottom-0 left-0 right-0 p-8 md:p-12">
-                  <div className="flex items-center gap-4 mb-4">
-                    <span className="px-4 py-1.5 bg-primary text-white text-xs font-bold rounded-full">
+                <div className="absolute bottom-0 left-0 right-0 p-10 md:p-16">
+                  <div className="flex items-center gap-5 mb-6">
+                    <motion.span 
+                      className="px-6 py-2 bg-gradient-to-r from-primary to-purple-600 text-white text-sm font-black rounded-full shadow-lg"
+                      whileHover={{ scale: 1.1, rotate: 5 }}
+                    >
                       Featured
-                    </span>
-                    <div className="flex items-center gap-2 text-white/80 text-sm">
-                      <Clock size={16} />
+                    </motion.span>
+                    <div className="flex items-center gap-3 text-white/90 text-sm font-bold">
+                      <Clock size={18} />
                       <span>{calculateReadingTime(featuredBlog.content)} min read</span>
                     </div>
-                    <div className="flex items-center gap-2 text-white/80 text-sm">
-                      <CalendarIcon size={16} />
+                    <div className="flex items-center gap-3 text-white/90 text-sm font-bold">
+                      <CalendarIcon size={18} />
                       <span>{new Date(featuredBlog.publishedAt || featuredBlog.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
                     </div>
                   </div>
-                  <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-8 group-hover:text-primary transition-all tracking-tighter leading-[1.1]">
+                  <h2 className="text-5xl md:text-6xl lg:text-7xl font-black text-white mb-10 group-hover:text-primary transition-all tracking-tighter leading-[1.1]">
                     {featuredBlog.title}
                   </h2>
-                  <p className="text-white/90 text-xl md:text-2xl mb-10 line-clamp-2 leading-relaxed max-w-4xl font-medium">
+                  <p className="text-white/90 text-2xl md:text-3xl mb-12 line-clamp-2 leading-relaxed max-w-5xl font-medium">
                     {featuredBlog.excerpt}
                   </p>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-3">
                     {featuredBlog.tags?.slice(0, 3).map(tag => (
                       <span
                         key={tag}
-                        className="px-3 py-1 bg-white/20 backdrop-blur-sm text-white text-xs font-semibold rounded-full border border-white/30"
+                        className="px-4 py-2 bg-white/20 backdrop-blur-sm text-white text-sm font-black rounded-full border-2 border-white/30"
                       >
-                        {tag}
+                        #{tag}
                       </span>
                     ))}
                   </div>
@@ -185,40 +210,44 @@ const Blogs = () => {
           </motion.div>
         )}
 
-        {/* Search and Tag Filter */}
+        {/* Enhanced Search and Tag Filter */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="flex flex-col lg:flex-row gap-6 mb-12"
+          className="flex flex-col lg:flex-row gap-8 mb-16"
         >
-          <div className="flex-grow relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
+          <div className="flex-grow relative group">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors z-10" size={24} />
             <input
               type="text"
               placeholder="Search articles..."
-              className="w-full pl-10 pr-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all shadow-sm"
+              className="w-full pl-14 pr-4 py-5 bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl border-2 border-slate-200 dark:border-slate-700 rounded-2xl focus:ring-4 focus:ring-primary/20 focus:border-primary outline-none transition-all shadow-lg hover:shadow-xl font-medium text-lg"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
             {searchTerm && (
-              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-400">
+              <motion.span 
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-slate-400 font-bold"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+              >
                 Searching...
-              </span>
+              </motion.span>
             )}
           </div>
 
-          <div className="flex items-center gap-2 overflow-x-auto pb-2 no-scrollbar lg:max-w-2xl">
-            <Tag size={18} className="text-slate-400 flex-shrink-0" />
+          <div className="flex items-center gap-3 overflow-x-auto pb-2 no-scrollbar lg:max-w-3xl">
+            <Tag size={22} className="text-slate-400 flex-shrink-0" />
             {allTags.map(tag => (
               <motion.button
                 key={tag}
                 onClick={() => { setSelectedTag(tag); setCurrentPage(1); }}
-                whileHover={{ scale: 1.05 }}
+                whileHover={{ scale: 1.08, y: -2 }}
                 whileTap={{ scale: 0.95 }}
-                className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all ${selectedTag === tag
-                    ? 'bg-gradient-to-r from-primary to-purple-600 text-white shadow-lg shadow-primary/30'
-                    : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700'
+                className={`px-6 py-3 rounded-2xl text-sm font-black whitespace-nowrap transition-all shadow-md ${selectedTag === tag
+                    ? 'bg-gradient-to-r from-primary to-purple-600 text-white shadow-lg shadow-primary/40 scale-105'
+                    : 'bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 border-2 border-slate-200 dark:border-slate-700'
                   }`}
               >
                 {tag}

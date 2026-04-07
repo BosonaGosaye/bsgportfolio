@@ -10,11 +10,29 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-    if (userInfo) {
-      setUser(userInfo);
-    }
-    setLoading(false);
+    const verifySession = async () => {
+      const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+      if (!userInfo || !userInfo.token) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        // Verify the token is still valid with the server
+        await api.get('/auth/verify', {
+          headers: { Authorization: `Bearer ${userInfo.token}` },
+        });
+        setUser(userInfo);
+      } catch {
+        // Token is invalid or expired — clear it
+        localStorage.removeItem('userInfo');
+        setUser(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    verifySession();
   }, []);
 
   const login = async (email, password) => {
@@ -31,7 +49,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider value={{ user, login, logout, loading }}>
-      {!loading && children}
+      {children}
     </AuthContext.Provider>
   );
 };

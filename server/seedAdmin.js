@@ -10,7 +10,7 @@ const seedAdmin = async () => {
         console.log('MongoDB Connected');
 
         const args = process.argv.slice(2);
-        const email = args[0] || 'bosgo2121@gmai.com';
+        const email = args[0] || 'bosgo2121@gmail.com';
         const password = args[1] || '1q2w3e4r5t';
 
         // Check if user exists

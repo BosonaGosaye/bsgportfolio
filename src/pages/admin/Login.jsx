@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Navigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Lock, Mail, LogIn, AlertCircle } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
@@ -9,25 +9,30 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
-  
-  const { login } = useAuth();
+  const [submitting, setSubmitting] = useState(false);
+
+  const { login, user, loading } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    setLoading(true);
-    
+    setSubmitting(true);
+
     try {
       await login(email, password);
-      navigate('/admin/dashboard');
+      navigate('/admin');
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to login');
     } finally {
-      setLoading(false);
+      setSubmitting(false);
     }
   };
+
+  // Redirect already-authenticated users away from the login page
+  if (!loading && user) {
+    return <Navigate to="/admin" replace />;
+  }
 
   return (
     <>
@@ -88,10 +93,10 @@ const Login = () => {
 
               <button
                 type="submit"
-                disabled={loading}
+                disabled={submitting}
                 className="w-full py-4 bg-primary text-white rounded-xl font-bold flex items-center justify-center hover:bg-blue-700 transition-all shadow-lg shadow-blue-500/30 disabled:opacity-70 disabled:cursor-not-allowed"
               >
-                {loading ? 'Logging in...' : (
+                {submitting ? 'Logging in...' : (
                   <>
                     Sign In
                     <LogIn size={20} className="ml-2" />
