@@ -226,7 +226,7 @@ const About = () => {
                 className="relative order-1 lg:order-2"
               >
                 {/* Enhanced Glassmorphism Container */}
-                <div className="relative bg-gradient-to-br from-white/70 via-white/60 to-white/50 dark:from-slate-800/70 dark:via-slate-800/60 dark:to-slate-800/50 backdrop-blur-2xl rounded-[3rem] p-10 md:p-14 shadow-2xl border-2 border-white/50 dark:border-slate-700/50 overflow-hidden group">
+                <div className="relative bg-gradient-to-br from-white/70 via-white/60 to-white/50 dark:from-slate-800/70 dark:via-slate-800/60 dark:to-slate-800/50 backdrop-blur-2xl rounded-[3rem] p-6 md:p-10 shadow-2xl border-2 border-white/50 dark:border-slate-700/50 overflow-hidden group">
                   {/* Animated gradient overlay */}
                   <motion.div
                     className="absolute inset-0 bg-gradient-to-br from-primary/5 via-purple-500/5 to-pink-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700"
@@ -236,7 +236,7 @@ const About = () => {
                     transition={{ duration: 10, repeat: Infinity }}
                   />
                   
-                  <div className="flex items-center gap-4 mb-12 relative z-10">
+                  <div className="flex items-center gap-4 mb-6 relative z-10">
                     <motion.div
                       animate={{ rotate: [0, 360] }}
                       transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
@@ -248,7 +248,7 @@ const About = () => {
                     </h1>
                   </div>
 
-                  <div className="prose prose-xl md:prose-2xl dark:prose-invert max-w-none mb-14 text-slate-700 dark:text-slate-300 leading-relaxed font-medium relative z-10">
+                  <div className="prose prose-xl md:prose-2xl dark:prose-invert max-w-none mb-10 text-slate-700 dark:text-slate-300 leading-relaxed font-medium relative z-10">
                     <ReactMarkdown
                       components={{
                         p: ({ children }) => <p className="mb-10 leading-relaxed text-xl text-justify">{children}</p>,

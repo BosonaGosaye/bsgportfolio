@@ -424,20 +424,20 @@ const Home = () => {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ type: 'spring', duration: 0.8 }}
-              className="glass-card p-14 md:p-20 relative overflow-hidden order-1 lg:order-2"
+              className="glass-card p-6 md:p-10 relative overflow-hidden order-1 lg:order-2"
             >
               <div className="absolute top-0 right-0 -mt-16 -mr-16 w-48 h-48 bg-primary/10 rounded-full blur-3xl" />
               <div className="absolute bottom-0 left-0 -mb-16 -ml-16 w-48 h-48 bg-purple-500/10 rounded-full blur-3xl" />
 
               <div className="relative z-10">
                 <motion.div 
-                  className="flex items-center gap-4 mb-12"
+                  className="flex items-center gap-4 mb-6"
                   whileHover={{ x: 10 }}
                 >
                   <Sparkles className="w-12 h-12 text-primary animate-pulse" />
                   <h2 className="text-4xl md:text-5xl font-black tracking-tighter text-gradient">About Me</h2>
                 </motion.div>
-                <div className="prose prose-xl md:prose-2xl dark:prose-invert max-w-none mb-14 text-slate-700 dark:text-slate-300 leading-relaxed font-medium">
+                <div className="prose prose-xl md:prose-2xl dark:prose-invert max-w-none mb-8 text-slate-700 dark:text-slate-300 leading-relaxed font-medium">
                      <ReactMarkdown
                       components={{
                         p: ({ children }) => <p className="mb-10 leading-relaxed text-xl text-justify">{children}</p>,
