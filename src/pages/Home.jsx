@@ -260,7 +260,7 @@ const Home = () => {
               <div className="prose prose-xl dark:prose-invert max-w-2xl mb-14 text-slate-700 dark:text-slate-300 leading-relaxed font-medium">
                 <ReactMarkdown
                   components={{
-                    p: ({ children }) => <p className="mb-6 text-lg md:text-xl">{children}</p>,
+                    p: ({ children }) => <p className="mb-6 text-lg md:text-xl text-justify">{children}</p>,
                     strong: ({ children }) => <strong className="text-primary font-bold relative inline-block">{children}</strong>,
                   }}
                 >
@@ -440,7 +440,7 @@ const Home = () => {
                 <div className="prose prose-xl md:prose-2xl dark:prose-invert max-w-none mb-14 text-slate-700 dark:text-slate-300 leading-relaxed font-medium">
                      <ReactMarkdown
                       components={{
-                        p: ({ children }) => <p className="mb-10 leading-relaxed text-xl">{children}</p>,
+                        p: ({ children }) => <p className="mb-10 leading-relaxed text-xl text-justify">{children}</p>,
                         strong: ({ children }) => <strong className="text-primary dark:text-primary font-black border-b-4 border-primary/30 pb-1">{children}</strong>,
                         em: ({ children }) => <em className="text-purple-600 dark:text-purple-400 italic not-italic font-bold bg-purple-500/10 px-3 py-1 rounded-lg">{children}</em>,
                         li: ({ children }) => <li className="mb-5 text-xl list-none flex items-start gap-4"><span className="w-3 h-3 rounded-full bg-gradient-to-r from-primary to-purple-600 mt-3 shrink-0 shadow-lg" />{children}</li>,
