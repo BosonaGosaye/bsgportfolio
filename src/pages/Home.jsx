@@ -239,7 +239,7 @@ const Home = () => {
               className="order-2 lg:order-1"
             >
 
-              <h1 className="text-3xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-5xl font-black mb-6 sm:mb-10 leading-[1.05] tracking-tighter text-slate-900 dark:text-white">
+              <h1 className="text-3xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-5xl font-black mb-3 sm:mb-5 leading-[1.05] tracking-tighter text-slate-900 dark:text-white">
                 Hi, I'm{" "}
                 <span className="relative inline-block">
                   <span className="bg-gradient-to-r from-primary via-blue-600 to-purple-600 bg-clip-text text-transparent animate-gradient-shift">
@@ -253,7 +253,7 @@ const Home = () => {
                 </span>
               </h1>
 
-              <h2 className="text-3xl md:text-4xl font-black text-slate-700 dark:text-slate-300 mb-12 min-h-[4rem]">
+              <h2 className="text-3xl md:text-4xl font-black text-slate-700 dark:text-slate-300 mb-3 min-h-[4rem]">
                 {!loading && <TypingAnimation texts={typingTexts} />}
               </h2>
 
