@@ -42,6 +42,11 @@ app.get('/', (req, res) => {
   res.send('API is running...');
 });
 
+// Health check endpoint for Render
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'ok', message: 'Server is healthy' });
+});
+
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
