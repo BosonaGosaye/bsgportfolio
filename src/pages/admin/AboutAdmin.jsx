@@ -18,7 +18,7 @@ import {
     getExperience, createExperience, updateExperience, deleteExperience,
     getEducation, createEducation, updateEducation, deleteEducation,
     getCertifications, createCertification, updateCertification, deleteCertification,
-    uploadImage
+    uploadFile
 } from '../../services/api';
 import ConfirmationModal from '../../components/ConfirmationModal';
 
@@ -151,7 +151,10 @@ const AboutAdmin = () => {
             if (activeTab === 'certifications' && certificateFile) {
                 setUploadingFile(true);
                 try {
-                    const uploadRes = await uploadImage(certificateFile, user.token);
+                    const formData = new FormData();
+                    formData.append('file', certificateFile);
+                    
+                    const uploadRes = await uploadFile(formData, user.token);
                     updatedFormData.certificateFile = uploadRes.data.url;
                     
                     // Determine file type
