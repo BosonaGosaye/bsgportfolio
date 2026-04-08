@@ -250,8 +250,8 @@ export const sendMessage = (messageData) => api.post('/messages', messageData);
 export const getMessages = (token) => api.get('/messages', {
   headers: { Authorization: `Bearer ${token}` }
 });
-export const updateMessageStatus = (id, status, token) => {
-  return api.put(`/messages/${id}`, { status }, {
+export const updateMessageStatus = (id, status, token, additionalData = {}) => {
+  return api.put(`/messages/${id}`, { status, ...additionalData }, {
     headers: { Authorization: `Bearer ${token}` }
   });
 };

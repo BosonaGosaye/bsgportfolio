@@ -50,6 +50,15 @@ const updateMessageStatus = async (req, res) => {
 
     if (message) {
       message.status = req.body.status || message.status;
+      
+      // Update reply fields if provided
+      if (req.body.reply) {
+        message.reply = req.body.reply;
+      }
+      if (req.body.repliedAt) {
+        message.repliedAt = req.body.repliedAt;
+      }
+      
       const updatedMessage = await message.save();
       res.json(updatedMessage);
     } else {

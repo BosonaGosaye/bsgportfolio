@@ -8,9 +8,11 @@ const messageSchema = new mongoose.Schema({
   message: { type: String, required: true },
   status: {
     type: String,
-    enum: ['unread', 'read', 'archived'],
+    enum: ['unread', 'read', 'replied'],
     default: 'unread'
-  }
+  },
+  reply: { type: String },
+  repliedAt: { type: Date }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Message', messageSchema);
