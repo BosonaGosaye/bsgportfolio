@@ -314,7 +314,8 @@ const AboutAdmin = () => {
                             </button>
                         </div>
 
-                        <form onSubmit={handleSubmit} className="p-6 space-y-4">
+                        <form onSubmit={handleSubmit} className="flex flex-col max-h-[70vh]">
+                            <div className="p-6 space-y-4 overflow-y-auto flex-1">
                             {activeTab !== 'certifications' ? (
                                 <>
                                     <div>
@@ -496,8 +497,9 @@ const AboutAdmin = () => {
                                     </div>
                                 </>
                             )}
+                            </div>
 
-                            <div className="flex justify-end gap-3 pt-4 border-t border-slate-100 dark:border-slate-800 mt-4">
+                            <div className="flex justify-end gap-3 p-6 border-t border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50">
                                 <button
                                     type="button"
                                     onClick={handleCloseModal}

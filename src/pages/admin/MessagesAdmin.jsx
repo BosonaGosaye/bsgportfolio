@@ -330,25 +330,25 @@ const MessagesAdmin = () => {
                             </div>
 
                             {/* Content */}
-                            <div className="flex-1 overflow-y-auto p-8">
+                            <div className="flex-1 overflow-y-auto p-6 md:p-8">
                                 <div className="prose dark:prose-invert max-w-none">
                                     <div className="mb-6">
-                                        <h3 className="text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">Message</h3>
-                                        <p className="whitespace-pre-wrap font-sans text-base leading-relaxed text-slate-700 dark:text-slate-300 bg-slate-50 dark:bg-slate-900/50 p-6 rounded-xl border border-slate-200 dark:border-slate-700">
+                                        <h3 className="text-sm font-bold text-slate-500 uppercase tracking-wider mb-3">Message</h3>
+                                        <div className="whitespace-pre-wrap font-sans text-base leading-relaxed text-slate-700 dark:text-slate-300 bg-slate-50 dark:bg-slate-900/50 p-6 rounded-xl border border-slate-200 dark:border-slate-700 max-h-[400px] overflow-y-auto">
                                             {selectedMessage.message}
-                                        </p>
+                                        </div>
                                     </div>
 
                                     {/* Show existing reply if replied */}
                                     {selectedMessage.status === 'replied' && selectedMessage.reply && (
                                         <div className="mt-6">
-                                            <h3 className="text-sm font-bold text-slate-500 uppercase tracking-wider mb-2 flex items-center gap-2">
+                                            <h3 className="text-sm font-bold text-slate-500 uppercase tracking-wider mb-3 flex items-center gap-2">
                                                 <Reply size={16} />
                                                 Your Reply
                                             </h3>
-                                            <p className="whitespace-pre-wrap font-sans text-base leading-relaxed text-slate-700 dark:text-slate-300 bg-purple-50 dark:bg-purple-900/20 p-6 rounded-xl border border-purple-200 dark:border-purple-800">
+                                            <div className="whitespace-pre-wrap font-sans text-base leading-relaxed text-slate-700 dark:text-slate-300 bg-purple-50 dark:bg-purple-900/20 p-6 rounded-xl border border-purple-200 dark:border-purple-800 max-h-[300px] overflow-y-auto">
                                                 {selectedMessage.reply}
-                                            </p>
+                                            </div>
                                             <p className="text-xs text-slate-500 mt-2">
                                                 Replied on {new Date(selectedMessage.repliedAt).toLocaleString()}
                                             </p>
