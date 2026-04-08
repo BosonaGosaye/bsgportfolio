@@ -181,7 +181,7 @@ const Home = () => {
               initial={{ opacity: 0, scale: 0.8, rotate: -5 }}
               animate={{ opacity: 1, scale: 1, rotate: 0 }}
               transition={{ duration: 0.8, type: 'spring' }}
-              className="relative perspective-1000 order-1 lg:order-2"
+              className="relative perspective-1000 order-1 lg:order-2 lg:mb-16"
             >
               <div className="w-64 h-64 sm:w-72 sm:h-72 md:w-[450px] md:h-[450px] mx-auto relative">
                 {/* Multiple animated gradient layers */}

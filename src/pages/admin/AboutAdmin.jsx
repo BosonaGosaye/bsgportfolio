@@ -8,13 +8,17 @@ import {
     Award,
     Save,
     X,
-    Loader
+    Loader,
+    Upload,
+    FileText,
+    Image as ImageIcon
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import {
     getExperience, createExperience, updateExperience, deleteExperience,
     getEducation, createEducation, updateEducation, deleteEducation,
-    getCertifications, createCertification, updateCertification, deleteCertification
+    getCertifications, createCertification, updateCertification, deleteCertification,
+    uploadImage
 } from '../../services/api';
 import ConfirmationModal from '../../components/ConfirmationModal';
 
@@ -34,9 +38,12 @@ const AboutAdmin = () => {
     // Initial Form States
     const initialExperience = { position: '', company: '', startDate: '', endDate: '', description: '', current: false };
     const initialEducation = { degree: '', institution: '', startDate: '', endDate: '', description: '', current: false };
-    const initialCertification = { name: '', issuer: '', date: '', url: '', status: 'Active' };
+    const initialCertification = { name: '', issuer: '', date: '', url: '', status: 'Active', certificateFile: '', certificateFileType: 'image' };
 
     const [formData, setFormData] = useState({});
+    const [certificateFile, setCertificateFile] = useState(null);
+    const [certificatePreview, setCertificatePreview] = useState(null);
+    const [uploadingFile, setUploadingFile] = useState(false);
 
     useEffect(() => {
         fetchData();
@@ -73,6 +80,11 @@ const AboutAdmin = () => {
             if (formattedItem.endDate) formattedItem.endDate = formattedItem.endDate.split('T')[0];
             if (formattedItem.date) formattedItem.date = formattedItem.date.split('T')[0];
             setFormData(formattedItem);
+            
+            // Set certificate preview if editing
+            if (activeTab === 'certifications' && formattedItem.certificateFile) {
+                setCertificatePreview(formattedItem.certificateFile);
+            }
         } else {
             if (activeTab === 'experience') setFormData(initialExperience);
             else if (activeTab === 'education') setFormData(initialEducation);
@@ -84,6 +96,39 @@ const AboutAdmin = () => {
     const handleCloseModal = () => {
         setIsModalOpen(false);
         setEditingItem(null);
+        setCertificateFile(null);
+        setCertificatePreview(null);
+    };
+
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            // Validate file type (images and PDFs only)
+            const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'application/pdf'];
+            if (!validTypes.includes(file.type)) {
+                alert('Please upload an image (JPEG, PNG, WebP) or PDF file');
+                return;
+            }
+            
+            // Validate file size (max 10MB)
+            if (file.size > 10 * 1024 * 1024) {
+                alert('File size must be less than 10MB');
+                return;
+            }
+            
+            setCertificateFile(file);
+            
+            // Create preview
+            if (file.type === 'application/pdf') {
+                setCertificatePreview(URL.createObjectURL(file));
+            } else {
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    setCertificatePreview(reader.result);
+                };
+                reader.readAsDataURL(file);
+            }
+        }
     };
 
     const handleInputChange = (e) => {
@@ -100,16 +145,41 @@ const AboutAdmin = () => {
         try {
             let res;
             const isEdit = !!editingItem;
+            let updatedFormData = { ...formData };
+
+            // Upload certificate file if present
+            if (activeTab === 'certifications' && certificateFile) {
+                setUploadingFile(true);
+                try {
+                    const uploadRes = await uploadImage(certificateFile, user.token);
+                    updatedFormData.certificateFile = uploadRes.data.url;
+                    
+                    // Determine file type
+                    const fileType = certificateFile.type;
+                    if (fileType === 'application/pdf') {
+                        updatedFormData.certificateFileType = 'pdf';
+                    } else {
+                        updatedFormData.certificateFileType = 'image';
+                    }
+                } catch (uploadErr) {
+                    console.error('Error uploading certificate file:', uploadErr);
+                    alert('Failed to upload certificate file');
+                    setFormLoading(false);
+                    setUploadingFile(false);
+                    return;
+                }
+                setUploadingFile(false);
+            }
 
             if (activeTab === 'experience') {
-                if (isEdit) res = await updateExperience(editingItem._id, formData, user.token);
-                else res = await createExperience(formData, user.token);
+                if (isEdit) res = await updateExperience(editingItem._id, updatedFormData, user.token);
+                else res = await createExperience(updatedFormData, user.token);
             } else if (activeTab === 'education') {
-                if (isEdit) res = await updateEducation(editingItem._id, formData, user.token);
-                else res = await createEducation(formData, user.token);
+                if (isEdit) res = await updateEducation(editingItem._id, updatedFormData, user.token);
+                else res = await createEducation(updatedFormData, user.token);
             } else if (activeTab === 'certifications') {
-                if (isEdit) res = await updateCertification(editingItem._id, formData, user.token);
-                else res = await createCertification(formData, user.token);
+                if (isEdit) res = await updateCertification(editingItem._id, updatedFormData, user.token);
+                else res = await createCertification(updatedFormData, user.token);
             }
 
             // Update item in list or add new
@@ -373,6 +443,54 @@ const AboutAdmin = () => {
                                             <option value="In Progress">In Progress</option>
                                         </select>
                                     </div>
+                                    
+                                    {/* Certificate File Upload */}
+                                    <div>
+                                        <label className="block text-sm font-bold mb-2">Certificate File (Image or PDF)</label>
+                                        <div className="space-y-3">
+                                            <input
+                                                type="file"
+                                                accept="image/jpeg,image/jpg,image/png,image/webp,application/pdf"
+                                                onChange={handleFileChange}
+                                                className="w-full px-4 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:ring-2 focus:ring-primary outline-none file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-white hover:file:bg-blue-700 file:cursor-pointer"
+                                            />
+                                            <p className="text-xs text-slate-500">Upload certificate image (JPEG, PNG, WebP) or PDF. Max size: 10MB</p>
+                                            
+                                            {/* Preview */}
+                                            {certificatePreview && (
+                                                <div className="relative mt-3 p-4 bg-slate-100 dark:bg-slate-800 rounded-lg">
+                                                    <div className="flex items-center justify-between mb-2">
+                                                        <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">Preview:</span>
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => {
+                                                                setCertificateFile(null);
+                                                                setCertificatePreview(null);
+                                                            }}
+                                                            className="text-red-500 hover:text-red-700 transition-colors"
+                                                        >
+                                                            <X size={18} />
+                                                        </button>
+                                                    </div>
+                                                    {certificateFile?.type === 'application/pdf' || formData.certificateFileType === 'pdf' ? (
+                                                        <div className="flex items-center gap-3 p-3 bg-white dark:bg-slate-900 rounded-lg">
+                                                            <FileText size={32} className="text-red-500" />
+                                                            <div>
+                                                                <p className="text-sm font-semibold">PDF Document</p>
+                                                                <p className="text-xs text-slate-500">{certificateFile?.name || 'Existing PDF'}</p>
+                                                            </div>
+                                                        </div>
+                                                    ) : (
+                                                        <img
+                                                            src={certificatePreview}
+                                                            alt="Certificate preview"
+                                                            className="w-full h-48 object-contain rounded-lg bg-white dark:bg-slate-900"
+                                                        />
+                                                    )}
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
                                 </>
                             )}
 
@@ -386,11 +504,25 @@ const AboutAdmin = () => {
                                 </button>
                                 <button
                                     type="submit"
-                                    disabled={formLoading}
-                                    className="px-6 py-2 bg-primary text-white font-bold rounded-lg hover:bg-blue-700 transition-colors shadow-lg shadow-blue-500/30 flex items-center"
+                                    disabled={formLoading || uploadingFile}
+                                    className="px-6 py-2 bg-primary text-white font-bold rounded-lg hover:bg-blue-700 transition-colors shadow-lg shadow-blue-500/30 flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
-                                    {formLoading ? <Loader size={18} className="animate-spin mr-2" /> : <Save size={18} className="mr-2" />}
-                                    Save
+                                    {uploadingFile ? (
+                                        <>
+                                            <Upload size={18} className="animate-bounce mr-2" />
+                                            Uploading...
+                                        </>
+                                    ) : formLoading ? (
+                                        <>
+                                            <Loader size={18} className="animate-spin mr-2" />
+                                            Saving...
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Save size={18} className="mr-2" />
+                                            Save
+                                        </>
+                                    )}
                                 </button>
                             </div>
                         </form>

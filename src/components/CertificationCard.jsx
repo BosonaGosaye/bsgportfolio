@@ -1,7 +1,10 @@
-import { motion } from 'framer-motion';
-import { ExternalLink, Calendar, Award, CheckCircle2, Clock, XCircle } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ExternalLink, Calendar, Award, CheckCircle2, Clock, XCircle, FileText, X } from 'lucide-react';
+import { useState } from 'react';
 
 const CertificationCard = ({ cert }) => {
+  const [showModal, setShowModal] = useState(false);
+
   // Status configuration
   const statusConfig = {
     'Active': {
@@ -35,29 +38,38 @@ const CertificationCard = ({ cert }) => {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      whileHover={{
-        y: -8,
-        scale: 1.02,
-        transition: { duration: 0.3, ease: 'easeOut' }
-      }}
-      className="group relative"
-    >
-      {/* Glassmorphism Card */}
-      <div className={`glass-card rounded-2xl p-8 group-hover:border-primary/50 transition-all duration-500 relative overflow-hidden h-full flex flex-col group-hover:shadow-2xl group-hover:${config.glow}`}>
+    <>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        whileHover={{
+          y: -8,
+          scale: 1.02,
+          transition: { duration: 0.3, ease: 'easeOut' }
+        }}
+        className="group relative"
+        onClick={() => cert.certificateFile && setShowModal(true)}
+        style={{ cursor: cert.certificateFile ? 'pointer' : 'default' }}
+      >
+        {/* Glassmorphism Card */}
+        <div className={`glass-card rounded-2xl p-8 group-hover:border-primary/50 transition-all duration-500 relative overflow-hidden h-full flex flex-col group-hover:shadow-2xl group-hover:${config.glow}`}>
 
         {/* Dynamic Background Gradient */}
         <div className={`absolute inset-0 bg-gradient-to-br ${config.gradient} opacity-0 group-hover:opacity-[0.03] transition-opacity duration-500`} />
 
         {/* Status Badge */}
-        <div className="absolute top-6 right-6 z-10">
+        <div className="absolute top-6 right-6 z-10 flex flex-col gap-2 items-end">
           <div className={`flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r ${config.gradient} text-white text-[10px] font-black uppercase tracking-widest shadow-xl ${config.glow} ${config.animation}`}>
             <StatusIcon size={12} strokeWidth={3} />
             <span>{status}</span>
           </div>
+          {cert.certificateFile && (
+            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-500 text-white text-[9px] font-black uppercase tracking-widest shadow-lg">
+              <FileText size={10} strokeWidth={3} />
+              <span>View</span>
+            </div>
+          )}
         </div>
 
         {/* Content */}
@@ -123,6 +135,60 @@ const CertificationCard = ({ cert }) => {
       </div>
 
     </motion.div>
+
+      {/* Certificate Modal */}
+      <AnimatePresence>
+        {showModal && cert.certificateFile && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+            onClick={() => setShowModal(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ type: 'spring', duration: 0.5 }}
+              className="relative max-w-5xl w-full max-h-[90vh] bg-white dark:bg-slate-900 rounded-3xl shadow-2xl overflow-hidden"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Close Button */}
+              <button
+                onClick={() => setShowModal(false)}
+                className="absolute top-4 right-4 z-10 p-3 bg-slate-900/80 hover:bg-slate-900 text-white rounded-full transition-all hover:scale-110"
+              >
+                <X size={24} />
+              </button>
+
+              {/* Certificate Header */}
+              <div className="p-6 border-b border-slate-200 dark:border-slate-700 bg-gradient-to-r from-primary/10 to-purple-500/10">
+                <h3 className="text-2xl font-black text-slate-900 dark:text-white mb-2">{cert.name}</h3>
+                <p className="text-slate-600 dark:text-slate-400 font-semibold">{cert.issuer}</p>
+              </div>
+
+              {/* Certificate Content */}
+              <div className="p-6 overflow-auto max-h-[calc(90vh-140px)]">
+                {cert.certificateFileType === 'pdf' ? (
+                  <iframe
+                    src={cert.certificateFile}
+                    className="w-full h-[70vh] rounded-lg border border-slate-200 dark:border-slate-700"
+                    title={cert.name}
+                  />
+                ) : (
+                  <img
+                    src={cert.certificateFile}
+                    alt={cert.name}
+                    className="w-full h-auto rounded-lg shadow-lg"
+                  />
+                )}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 };
 
