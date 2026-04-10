@@ -17,7 +17,7 @@ const getHomeData = async (req, res) => {
             Education.find().sort({ startDate: -1 }),
             Experience.find().sort({ startDate: -1 }),
             Project.find({ isFeatured: true }).sort({ createdAt: -1 }).limit(3),
-            Skill.find({ category: 'Tools & Technologies' }),
+            Skill.find().sort({ category: 1, order: 1 }), // Get ALL skills, sorted by category and order
             Blog.find({ isPublished: true }).sort({ createdAt: -1 }).limit(3),
             Service.find({ featured: true }).limit(3),
             Certification.find().sort({ issueDate: -1 })

@@ -515,7 +515,7 @@ const About = () => {
               </motion.div>
               <h2 className="text-5xl md:text-6xl lg:text-7xl font-black tracking-tighter mb-6">
                 <span className="bg-gradient-to-r from-blue-600 via-cyan-600 to-teal-600 bg-clip-text text-transparent">
-                  Technical Arsenal
+                  Technical Skills
                 </span>
               </h2>
               <p className="text-xl md:text-2xl text-slate-600 dark:text-slate-400 max-w-3xl mx-auto font-medium leading-relaxed">

@@ -152,6 +152,13 @@ const Home = () => {
       'Tech Enthusiast'
     ];
 
+  // Group skills by category
+  const skillsByCategory = skills.reduce((acc, skill) => {
+    if (!acc[skill.category]) acc[skill.category] = [];
+    acc[skill.category].push(skill);
+    return acc;
+  }, {});
+
   const socialLinks = [
     { icon: Github, url: profile?.socialLinks?.github, label: 'GitHub' },
     { icon: Linkedin, url: profile?.socialLinks?.linkedin, label: 'LinkedIn' },
@@ -707,49 +714,87 @@ const Home = () => {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-r from-blue-500/10 via-cyan-500/10 to-transparent rounded-full blur-[150px] animate-pulse" />
         
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-20"
-          >
-            <motion.div 
-              className="inline-flex items-center gap-3 px-5 py-2 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 rounded-full mb-6"
-              whileHover={{ scale: 1.05, rotate: 2 }}
-            >
-              <Code className="w-5 h-5 text-blue-600 animate-pulse" />
-              <span className="text-sm font-black uppercase tracking-wider bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">Tech Stack</span>
-            </motion.div>
-            <h2 className="text-4xl md:text-5xl lg:text-5xl font-black tracking-tighter mb-6">
-              <span className="bg-gradient-to-r from-blue-600 via-cyan-600 to-teal-600 bg-clip-text text-transparent">
-                Tools & Technologies
-              </span>
-            </h2>
-            <p className="text-xl md:text-2xl text-slate-600 dark:text-slate-400 max-w-3xl mx-auto font-medium leading-relaxed">
-              My technical expertise and toolset for building modern applications.
-            </p>
-          </motion.div>
+          {/* Enhanced Skills & Tools */}
+                    <motion.section
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.6 }}
+                      className="mb-40"
+                    >
+                      <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="text-center mb-20"
+                      >
+                        <motion.div 
+                          className="inline-flex items-center gap-3 px-5 py-2 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 rounded-full mb-6"
+                          whileHover={{ scale: 1.05 }}
+                        >
+                          <Code className="w-5 h-5 text-blue-600 animate-pulse" />
+                          <span className="text-sm font-black uppercase tracking-wider bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">Skills</span>
+                        </motion.div>
+                        <h2 className="text-5xl md:text-6xl lg:text-7xl font-black tracking-tighter mb-6">
+                          <span className="bg-gradient-to-r from-blue-600 via-cyan-600 to-teal-600 bg-clip-text text-transparent">
+                            Technical Skills
+                          </span>
+                        </h2>
+                        <p className="text-xl md:text-2xl text-slate-600 dark:text-slate-400 max-w-3xl mx-auto font-medium leading-relaxed">
+                          My technical expertise across the engineering spectrum.
+                        </p>
+                      </motion.div>
+                      
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mt-16">
+                        {Object.entries(skillsByCategory).map(([category, categorySkills], index) => (
+                          <motion.div
+                            key={category}
+                            initial={{ opacity: 0, y: 30, scale: 0.9 }}
+                            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: index * 0.15, type: 'spring' }}
+                            whileHover={{ y: -12, scale: 1.03 }}
+                            className="relative group h-full"
+                          >
+                            <div className="glass-card p-12 h-full relative overflow-hidden flex flex-col">
+                              {/* Animated glowing background */}
+                              <motion.div 
+                                className="absolute -top-10 -right-10 w-48 h-48 bg-primary/5 rounded-full blur-3xl group-hover:bg-primary/10 transition-colors"
+                                animate={{ 
+                                  scale: [1, 1.2, 1],
+                                  rotate: [0, 180, 360]
+                                }}
+                                transition={{ duration: 10, repeat: Infinity }}
+                              />
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-10 mt-20">
-            {loading ? (
-              [...Array(6)].map((_, i) => <SkeletonLoader key={i} type="bar" />)
-            ) : Array.isArray(skills) && skills.length > 0 ? (
-              skills.map((skill, index) => (
-                <motion.div
-                  key={skill._id}
-                  initial={{ opacity: 0, x: index % 2 === 0 ? -30 : 30 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 }}
-                >
-                  <SkillBar skill={skill} />
-                </motion.div>
-              ))
-            ) : (
-              <p className="col-span-full text-center text-slate-500">No skills added yet.</p>
-            )}
-          </div>
-        </div>
+                              <div className="relative z-10 mb-10 flex items-center justify-between">
+                                <h3 className="text-3xl font-black tracking-tight text-gradient uppercase">
+                                  {category}
+                                </h3>
+                                <motion.div 
+                                  className="w-14 h-14 bg-gradient-to-br from-primary/20 to-blue-600/20 rounded-2xl flex items-center justify-center"
+                                  whileHover={{ rotate: 360, scale: 1.2 }}
+                                  transition={{ duration: 0.6 }}
+                                >
+                                  <Code className="text-primary w-7 h-7" />
+                                </motion.div>
+                              </div>
+          
+                              <div className="space-y-8 flex-grow">
+                                {categorySkills.map((skill) => (
+                                  <SkillBar key={skill._id} skill={skill} />
+                                ))}
+                              </div>
+          
+                              <div className="mt-10 pt-8 border-t-2 border-slate-200/50 dark:border-slate-700/50">
+                                <p className="text-xs uppercase tracking-[0.2em] font-black text-slate-400 dark:text-slate-500">Mastery Level Established</p>
+                              </div>
+                            </div>
+                          </motion.div>
+                        ))}
+                      </div>
+                    </motion.section>        
+                    </div>
       </section>
 
       {/* Blog Section */}
