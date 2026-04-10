@@ -130,7 +130,7 @@ const Blogs = () => {
           </motion.div>
           
           <motion.h1 
-            className="text-6xl md:text-8xl lg:text-9xl font-black mb-10 tracking-tighter relative z-10"
+            className="text-4xl md:text-5xl lg:text-6xl font-black mb-10 tracking-tighter relative z-10"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.2 }}

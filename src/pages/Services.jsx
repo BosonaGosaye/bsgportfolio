@@ -91,7 +91,7 @@ const Services = () => {
                         </motion.div>
 
                         <motion.h1 
-                            className="text-5xl md:text-7xl lg:text-8xl font-black mb-8 leading-tight relative"
+                            className="text-4xl md:text-5xl lg:text-6xl font-black mb-8 leading-tight relative"
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
                             transition={{ delay: 0.3 }}
