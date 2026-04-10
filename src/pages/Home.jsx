@@ -3,7 +3,7 @@ import { motion, useInView } from 'framer-motion';
 import { ArrowRight, Download, Mail, Code, Briefcase, Users, Award, Sparkles, Github, Linkedin, Twitter, Instagram } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
-import { getHomeData } from '../services/api';
+import { getHomeData, getSkills } from '../services/api';
 import ProjectCard from '../components/ProjectCard';
 import BlogCard from '../components/BlogCard';
 import SkillBar from '../components/SkillBar';
@@ -103,14 +103,18 @@ const Home = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const homeData = await getHomeData();
-        const { profile, education, experience, projects, skills, blogs, services, certifications } = homeData.data || homeData;
+        const [homeData, skillsRes] = await Promise.all([
+          getHomeData(),
+          getSkills()
+        ]);
+        
+        const { profile, education, experience, projects, blogs, services, certifications } = homeData.data || homeData;
 
         setProfile(profile);
         setEducation(education || []);
         setExperience(experience || []);
         setProjects(projects || []);
-        setSkills(skills || []);
+        setSkills(skillsRes.data || []); // Use skills from direct API call
         setBlogs(blogs || []);
         setServices(services || []);
         setCertifications(certifications || []);
@@ -153,11 +157,15 @@ const Home = () => {
     ];
 
   // Group skills by category
-  const skillsByCategory = skills.reduce((acc, skill) => {
-    if (!acc[skill.category]) acc[skill.category] = [];
-    acc[skill.category].push(skill);
-    return acc;
-  }, {});
+  const skillsByCategory = Array.isArray(skills) && skills.length > 0
+    ? skills.reduce((acc, skill) => {
+        if (!acc[skill.category]) acc[skill.category] = [];
+        acc[skill.category].push(skill);
+        return acc;
+      }, {})
+    : {};
+
+
 
   const socialLinks = [
     { icon: Github, url: profile?.socialLinks?.github, label: 'GitHub' },
@@ -745,8 +753,22 @@ const Home = () => {
                         </p>
                       </motion.div>
                       
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mt-16">
-                        {Object.entries(skillsByCategory).map(([category, categorySkills], index) => (
+                      {loading ? (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mt-16">
+                          {[...Array(3)].map((_, i) => (
+                            <div key={i} className="glass-card p-12 h-64 animate-pulse">
+                              <div className="h-8 bg-slate-200 dark:bg-slate-700 rounded mb-6"></div>
+                              <div className="space-y-4">
+                                <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded"></div>
+                                <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded"></div>
+                                <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded"></div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      ) : Object.keys(skillsByCategory).length > 0 ? (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mt-16">
+                          {Object.entries(skillsByCategory).map(([category, categorySkills], index) => (
                           <motion.div
                             key={category}
                             initial={{ opacity: 0, y: 30, scale: 0.9 }}
@@ -793,6 +815,12 @@ const Home = () => {
                           </motion.div>
                         ))}
                       </div>
+                      ) : (
+                        <div className="text-center py-20">
+                          <Code size={64} className="mx-auto mb-4 text-slate-300 dark:text-slate-700" />
+                          <p className="text-xl text-slate-500 dark:text-slate-400">No skills found. Add skills from the admin panel.</p>
+                        </div>
+                      )}
                     </motion.section>        
                     </div>
       </section>
