@@ -1,4 +1,5 @@
 const Message = require('../models/Message');
+const { sendReplyEmail } = require('../utils/emailService');
 
 // @desc    Send a message
 // @route   POST /api/messages
@@ -69,6 +70,55 @@ const updateMessageStatus = async (req, res) => {
   }
 };
 
+// @desc    Reply to a message (send email)
+// @route   POST /api/messages/:id/reply
+// @access  Private/Admin
+const replyToMessage = async (req, res) => {
+  try {
+    const { replyText } = req.body;
+    const message = await Message.findById(req.params.id);
+
+    if (!message) {
+      return res.status(404).json({ message: 'Message not found' });
+    }
+
+    if (!replyText) {
+      return res.status(400).json({ message: 'Reply text is required' });
+    }
+
+    // Send email
+    try {
+      await sendReplyEmail({
+        to: message.email,
+        subject: message.subject,
+        replyText: replyText,
+        originalMessage: message.message,
+        senderName: message.name
+      });
+
+      // Update message status
+      message.status = 'replied';
+      message.reply = replyText;
+      message.repliedAt = new Date();
+      await message.save();
+
+      res.json({
+        success: true,
+        message: 'Reply sent successfully',
+        data: message
+      });
+    } catch (emailError) {
+      console.error('Email sending failed:', emailError);
+      res.status(500).json({ 
+        message: 'Failed to send email. Please check your email configuration.',
+        error: emailError.message 
+      });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 // @desc    Delete a message
 // @route   DELETE /api/messages/:id
 // @access  Private/Admin
@@ -91,5 +141,6 @@ module.exports = {
   sendMessage,
   getMessages,
   updateMessageStatus,
+  replyToMessage,
   deleteMessage
 };

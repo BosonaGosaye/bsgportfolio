@@ -255,6 +255,14 @@ export const updateMessageStatus = (id, status, token, additionalData = {}) => {
     headers: { Authorization: `Bearer ${token}` }
   });
 };
+
+export const replyToMessage = (id, replyText, token) => {
+  clearCache();
+  return api.post(`/messages/${id}/reply`, { replyText }, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+};
+
 export const deleteMessage = (id, token) => api.delete(`/messages/${id}`, {
   headers: { Authorization: `Bearer ${token}` }
 });

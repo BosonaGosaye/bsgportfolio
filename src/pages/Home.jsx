@@ -6,7 +6,7 @@ import ReactMarkdown from 'react-markdown';
 import { getHomeData, getSkills } from '../services/api';
 import ProjectCard from '../components/ProjectCard';
 import BlogCard from '../components/BlogCard';
-import SkillBar from '../components/SkillBar';
+import SkillCard from '../components/SkillCard';
 import ServiceCard from '../components/ServiceCard';
 import SkeletonLoader from '../components/SkeletonLoader';
 import Meta from '../components/Meta';
@@ -775,10 +775,9 @@ const Home = () => {
                             whileInView={{ opacity: 1, y: 0, scale: 1 }}
                             viewport={{ once: true }}
                             transition={{ delay: index * 0.15, type: 'spring' }}
-                            whileHover={{ y: -12, scale: 1.03 }}
                             className="relative group h-full"
                           >
-                            <div className="glass-card p-12 h-full relative overflow-hidden flex flex-col">
+                            <div className="glass-card p-8 h-full relative overflow-hidden flex flex-col">
                               {/* Animated glowing background */}
                               <motion.div 
                                 className="absolute -top-10 -right-10 w-48 h-48 bg-primary/5 rounded-full blur-3xl group-hover:bg-primary/10 transition-colors"
@@ -789,27 +788,39 @@ const Home = () => {
                                 transition={{ duration: 10, repeat: Infinity }}
                               />
           
-                              <div className="relative z-10 mb-10 flex items-center justify-between">
-                                <h3 className="text-3xl font-black tracking-tight text-gradient uppercase">
+                              {/* Category Header */}
+                              <div className="relative z-10 mb-8 flex items-center justify-between">
+                                <h3 className="text-2xl font-black tracking-tight text-gradient uppercase">
                                   {category}
                                 </h3>
                                 <motion.div 
-                                  className="w-14 h-14 bg-gradient-to-br from-primary/20 to-blue-600/20 rounded-2xl flex items-center justify-center"
+                                  className="w-12 h-12 bg-gradient-to-br from-primary/20 to-blue-600/20 rounded-2xl flex items-center justify-center"
                                   whileHover={{ rotate: 360, scale: 1.2 }}
                                   transition={{ duration: 0.6 }}
                                 >
-                                  <Code className="text-primary w-7 h-7" />
+                                  <Code className="text-primary w-6 h-6" />
                                 </motion.div>
                               </div>
           
-                              <div className="space-y-8 flex-grow">
+                              {/* Skills Grid */}
+                              <div className="grid grid-cols-2 gap-3 flex-grow">
                                 {categorySkills.map((skill) => (
-                                  <SkillBar key={skill._id} skill={skill} />
+                                  <SkillCard key={skill._id} skill={skill} />
                                 ))}
                               </div>
           
-                              <div className="mt-10 pt-8 border-t-2 border-slate-200/50 dark:border-slate-700/50">
-                                <p className="text-xs uppercase tracking-[0.2em] font-black text-slate-400 dark:text-slate-500">Mastery Level Established</p>
+                              {/* Footer Badge */}
+                              <div className="mt-8 pt-6 border-t-2 border-slate-200/50 dark:border-slate-700/50">
+                                <div className="flex items-center justify-between">
+                                  <p className="text-xs uppercase tracking-wider font-bold text-slate-400 dark:text-slate-500">
+                                    {categorySkills.length} Skills
+                                  </p>
+                                  <div className="flex gap-1">
+                                    {[...Array(3)].map((_, i) => (
+                                      <div key={i} className="w-2 h-2 rounded-full bg-primary/30" />
+                                    ))}
+                                  </div>
+                                </div>
                               </div>
                             </div>
                           </motion.div>
